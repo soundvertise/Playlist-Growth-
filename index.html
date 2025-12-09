@@ -16,14 +16,14 @@
             --border-radius: 8px;
         }
 
-        /* RESET TOTALE */
+        /* Reset Globale */
         * { box-sizing: border-box; }
         html, body { margin: 0; padding: 0; width: 100%; background-color: #000; }
 
         body {
             color: var(--text-main);
             font-family: 'Inter', sans-serif;
-            /* Padding per visualizzazione web comoda */
+            /* Padding per visualizzazione web CENTRATA */
             padding: 40px 0; 
             display: flex;
             flex-direction: column;
@@ -40,19 +40,20 @@
 
         /* --- CONTAINER PER L'EXPORT --- */
         #export-content {
-            width: 1123px; /* Larghezza fissa */
+            width: 1123px; /* Larghezza fissa A4 px */
             display: flex;
             flex-direction: column;
             align-items: center;
         }
 
-        /* --- SINGOLA PAGINA PDF (1123x794px = A4 PX ESATTI) --- */
+        /* --- PDF PAGE (Safe Height Fix) --- */
+        /* 1123px width. Height ridotta a 793px per evitare overflow pagina bianca */
         .pdf-page {
             background: url('Fabhertz_aesthetic_background_wallpaper_for_a_website_landing_p_bbf86bfd-9b57-4afc-b01e-4da55c2315f3.jpeg') no-repeat center center;
             background-size: cover;
             
             width: 1123px;
-            height: 794px;
+            height: 793px; /* -1px safe zone */
             
             padding: 5px 50px 20px 50px; 
             
@@ -60,10 +61,10 @@
             flex-direction: column;
             justify-content: flex-start;
             position: relative;
-            overflow: hidden; /* Taglia tutto ciò che esce */
+            overflow: hidden; 
             
             margin-bottom: 50px; /* Spazio visivo a schermo */
-            box-shadow: 0 0 50px rgba(0,0,0,0.5); /* Ombra a schermo */
+            box-shadow: 0 0 50px rgba(0,0,0,0.5); 
         }
 
         /* --- HEADER --- */
@@ -218,35 +219,35 @@
         .total-display { margin-top: 15px; padding-top: 10px; border-top: 1px solid #555; font-size: 1.4rem; font-weight: bold; text-align: right; color: var(--accent-purple); }
         .budget-disclaimer { font-size: 0.75rem; color: #aaa; text-align: right; margin-top: 4px; font-style: italic; opacity: 0.8; }
 
-        /* --- STILI MODALITÀ EXPORT (NO MARGINI, NO PADDING, NO CENTERING) --- */
+        /* --- STILI MODALITÀ EXPORT (NUCLEAR FIX MARGINI) --- */
+        /* Questo scatta quando premi Export */
         body.export-mode {
             padding: 0 !important;
             margin: 0 !important;
-            display: block !important;
-            width: 1123px !important;
-            /* CRITICO: Allinea a sinistra per evitare margini */
-            align-items: flex-start !important;
+            display: block !important; /* Disabilita Flexbox per evitare centratura */
+            width: 1123px !important; /* Larghezza fissa */
+            overflow: hidden !important;
         }
 
         body.export-mode #export-content {
             margin: 0 !important;
             padding: 0 !important;
-            /* CRITICO: Rimuove il centering */
-            align-items: flex-start !important;
+            width: 100% !important;
         }
 
         body.export-mode .pdf-page {
             margin: 0 !important;
             box-shadow: none !important;
-            /* FORZA IL SALTO PAGINA DOPO OGNI PAGINA */
-            page-break-after: always; 
+            border: none !important;
+            /* Forza il taglio pagina preciso */
+            page-break-after: always;
         }
         
-        /* Rimuovi break dopo l'ultima pagina per evitare pagina bianca finale */
         body.export-mode .pdf-page:last-child {
-            page-break-after: avoid;
+            page-break-after: avoid; /* Niente pagina bianca alla fine */
         }
 
+        /* Scambio Input/Text in Pagina 1 */
         body.export-mode #artistInput { display: none; }
         body.export-mode #artistDisplay { display: inline-block; }
 
@@ -324,6 +325,7 @@
                 <img src="LOGO WHITE NO BACKGROUND .png" alt="Soundvertise" onerror="this.style.display='none'">
                 <div class="header-titles">
                     <h1>What's Included</h1>
+                    <div class="artist-name-display" id="artistNameSyncP2"></div>
                 </div>
             </header>
 
@@ -332,7 +334,7 @@
                     <h2>1 - Playlist Creation</h2>
                     <div class="info-block"><span class="info-title">TITLE</span><span class="info-text">We can provide recommendations and ideas based on the genre or mood we want to convey. The title is essential for capturing attention and setting the tone of the playlist.</span></div>
                     <div class="info-block"><span class="info-title">DESCRIPTION</span><span class="info-text">We will suggest various playlist descriptions, including carefully chosen keywords designed to attract organic traffic from Spotify searches.</span></div>
-                    <div class="info-block"><span class="info-title">ARTWORK</span><span class="info-text">We'll send you several professional artwork options inspired by Spotify's editorial playlist designs. Feel free to share your ideas or references if you have a specific vision, so we can align with your preferences.</span></div>
+                    <div class="info-block"><span class="info-title">ARTWORK</span><span class="info-text">We’ll send you several professional artwork options inspired by Spotify’s editorial playlist designs. Feel free to share your ideas or references if you have a specific vision, so we can align with your preferences.</span></div>
                 </div>
 
                 <div class="col col-p2">
@@ -359,7 +361,10 @@
         let hasExternalKeys = (typeof API_CONFIG !== 'undefined');
         if(hasExternalKeys) document.getElementById('apiBar').style.display = 'none';
 
-        function syncArtistName(val) { document.getElementById('artistDisplay').innerText = val; }
+        function syncArtistName(val) {
+            document.getElementById('artistDisplay').innerText = val;
+            // Name Sync for Page 2 removed as requested
+        }
 
         let leftLocked = false;
         function generateSchedule() {
@@ -424,20 +429,16 @@
             } else { editMode.classList.remove('hidden'); viewMode.classList.add('hidden'); btn.innerText = "Confirm & Lock"; btn.classList.remove('locked'); rightLocked = false; }
         }
 
-        // --- EXPORT PDF FINAL (VERSIONE CORRETTA) ---
+        // --- EXPORT PDF FIX ---
         function exportToPDF() {
             const toHide = document.querySelectorAll('.hide-on-export');
             toHide.forEach(el => el.classList.add('hidden'));
 
-            // Attiva modalità export
+            // Modalità export (reset margini, allineamento sinistra)
             document.body.classList.add('export-mode');
-            
-            // CRITICO: Scroll a 0,0 E rimuovi scroll del body
             window.scrollTo(0, 0);
-            document.documentElement.scrollTop = 0;
-            document.body.scrollTop = 0;
 
-            // Sync Name
+            // Sync Artist
             const artistVal = document.getElementById('artistInput').value;
             document.getElementById('artistDisplay').innerText = artistVal;
 
@@ -445,26 +446,24 @@
             const element = document.getElementById('export-content');
             
             const opt = {
-                margin:       0,  // ZERO MARGINI
+                margin:       0,
                 filename:     finalFilename,
                 image:        { type: 'jpeg', quality: 1 },
                 html2canvas:  { 
                     scale: 2, 
                     useCORS: true, 
-                    scrollX: 0,   // FORCE scroll position
-                    scrollY: 0,   // FORCE scroll position
-                    x: 0,         // FORCE position X
-                    y: 0,         // FORCE position Y
-                    windowWidth: 1123,  // Force dimensioni
-                    windowHeight: 1588  // 794 * 2 pagine
+                    scrollX: 0, scrollY: 0,
+                    // NON usare windowWidth, lasciare automatico
                 },
                 jsPDF: { 
                     unit: 'px', 
+                    // Formato ESATTO in pixel
                     format: [1123, 794], 
                     orientation: 'landscape',
                     hotfixes: ["px_scaling"]
                 },
-                pagebreak: { mode: ['css', 'legacy'] }  // Riconosce page-break
+                // PAGEBREAK su CSS
+                pagebreak: { mode: ['css'], after: '.pdf-page' }
             };
 
             html2pdf().set(opt).from(element).save().then(() => {
