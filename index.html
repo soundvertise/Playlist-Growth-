@@ -16,19 +16,13 @@
             --border-radius: 8px;
         }
 
-        /* Reset Globale per evitare margini indesiderati */
-        html, body {
-            margin: 0;
-            padding: 0;
-            width: 100%;
-            height: 100%;
-        }
+        /* Reset Globale */
+        html, body { margin: 0; padding: 0; width: 100%; height: 100%; }
 
         body {
             background-color: #000;
             color: var(--text-main);
             font-family: 'Inter', sans-serif;
-            /* Padding SOLO per la visualizzazione a schermo. Verrà rimosso durante l'export */
             padding: 20px;
             display: flex;
             flex-direction: column;
@@ -44,34 +38,33 @@
         }
         .api-config input { background: #333; border: 1px solid #555; color: white; padding: 4px; }
 
-        /* --- CANVAS AREA (Dimensioni Esatte A4 in mm) --- */
+        /* --- CANVAS AREA (A4 Millimetrico) --- */
         #canvas-area {
             background: url('Fabhertz_aesthetic_background_wallpaper_for_a_website_landing_p_bbf86bfd-9b57-4afc-b01e-4da55c2315f3.jpeg') no-repeat center center;
             background-size: cover;
-            /* Dimensioni esatte A4 Landscape */
             width: 297mm;
             height: 210mm;
-            padding: 25px;
+            padding: 30px 50px;
             box-sizing: border-box;
             display: flex;
             flex-direction: column;
+            justify-content: flex-start; /* Allinea tutto in alto */
             position: relative;
             box-shadow: 0 0 50px rgba(0,0,0,0.8);
             overflow: hidden;
-            /* Assicura che non ci siano margini esterni */
             margin: 0 auto; 
         }
 
-        /* --- HEADER (Sfondo rimosso) --- */
+        /* --- HEADER --- */
         header {
             display: flex;
             align-items: center;
             justify-content: space-between;
-            margin-bottom: 15px;
-            /* SFONDO RIMOSSO */
+            margin-bottom: 20px;
             background: transparent; 
-            padding: 10px 0; /* Padding laterale rimosso */
-            height: 280px;
+            padding: 10px 0;
+            height: 260px;
+            flex-shrink: 0;
         }
 
         header img {
@@ -94,7 +87,7 @@
             text-transform: uppercase;
             letter-spacing: 3px;
             opacity: 0.9;
-            text-shadow: 0 2px 5px rgba(0,0,0,0.5); /* Ombra per leggibilità senza sfondo */
+            text-shadow: 0 2px 5px rgba(0,0,0,0.5);
         }
 
         .artist-input {
@@ -115,9 +108,10 @@
         .main-container {
             display: grid;
             grid-template-columns: 300px 1fr 1fr;
-            gap: 15px;
-            height: 100%;
+            gap: 20px;
+            height: 400px; /* Altezza fissa per lasciare spazio sotto */
             overflow: hidden;
+            flex-shrink: 0;
         }
 
         .col {
@@ -184,11 +178,11 @@
         
         .locked-schedule-item {
             display: flex; justify-content: space-between; align-items: center;
-            padding: 12px 0; border-bottom: 1px solid #333;
+            padding: 10px 0; border-bottom: 1px solid #333;
         }
-        .locked-month { font-weight: 600; color: var(--accent-purple); font-size: 1.1rem; }
+        .locked-month { font-weight: 600; color: var(--accent-purple); font-size: 1rem; }
         .locked-date { font-size: 0.85rem; color: #ccc; }
-        .locked-cost { font-size: 1.2rem; font-weight: 700; color: white; }
+        .locked-cost { font-size: 1.1rem; font-weight: 700; color: white; }
 
         /* --- CENTER COL: Spotify --- */
         .center-content {
@@ -196,18 +190,18 @@
             justify-content: center; height: 100%; flex-grow: 1;
         }
         .artwork-container {
-            width: 230px; height: 230px;
+            width: 200px; height: 200px;
             box-shadow: 0 15px 40px rgba(0,0,0,0.6);
-            margin-bottom: 20px; border-radius: 8px;
-            overflow: hidden; background: #000;
+            margin-bottom: 15px; border-radius: 8px;
+            overflow: hidden; background: #000; flex-shrink: 0;
         }
         .artwork-container img { width: 100%; height: 100%; object-fit: cover; }
-        .playlist-title { font-size: 1.4rem; font-weight: 700; margin: 5px 0; line-height: 1.2; text-align: center;}
-        .playlist-owner { font-size: 1rem; color: #999; margin-bottom: 15px; text-align: center;}
+        .playlist-title { font-size: 1.3rem; font-weight: 700; margin: 5px 0; line-height: 1.2; text-align: center;}
+        .playlist-owner { font-size: 0.9rem; color: #999; margin-bottom: 10px; text-align: center;}
         .playlist-followers {
             background: rgba(255,255,255,0.1); border: 1px solid rgba(255,255,255,0.2);
-            padding: 8px 16px; border-radius: 20px;
-            color: #fff; font-size: 1rem; font-weight: 700;
+            padding: 6px 14px; border-radius: 20px;
+            color: #fff; font-size: 0.9rem; font-weight: 700;
             text-transform: uppercase; letter-spacing: 1px;
         }
 
@@ -231,13 +225,13 @@
         }
         
         /* LOCKED VIEW */
-        .locked-tier-block { margin-bottom: 25px; }
+        .locked-tier-block { margin-bottom: 20px; }
         .locked-tier-title { 
-            color: var(--accent-purple); font-weight: 700; font-size: 1.1rem; 
-            text-transform: uppercase; margin-bottom: 6px; border-bottom: 1px solid #444; padding-bottom: 4px;
+            color: var(--accent-purple); font-weight: 700; font-size: 1rem; 
+            text-transform: uppercase; margin-bottom: 5px; border-bottom: 1px solid #444; padding-bottom: 4px;
         }
         .locked-country-list { 
-            font-size: 0.95rem; line-height: 1.5; color: #eee; 
+            font-size: 0.9rem; line-height: 1.5; color: #eee; 
         }
 
         /* --- EXPORT BUTTON --- */
@@ -252,9 +246,19 @@
         .export-btn:hover { transform: scale(1.05); background-color: #7e57c2; }
 
         .hidden { display: none !important; }
+        
+        /* TOTALS AND DISCLAIMER */
         .total-display {
             margin-top: 15px; padding-top: 10px; border-top: 1px solid #555;
             font-size: 1.4rem; font-weight: bold; text-align: right; color: var(--accent-purple);
+        }
+        .budget-disclaimer {
+            font-size: 0.75rem;
+            color: #aaa;
+            text-align: right;
+            margin-top: 4px;
+            font-style: italic;
+            opacity: 0.8;
         }
 
     </style>
@@ -301,13 +305,15 @@
                 </div>
 
                 <div class="total-display" id="totalDisplay">Total: €0.00</div>
+                <div class="budget-disclaimer">(monthly ads budget not included)</div>
+                
                 <button class="action-btn hide-on-export" id="btn-lock-left" onclick="toggleLeft()">Confirm & Lock</button>
             </div>
 
             <div class="col">
                 <h2>Playlist Preview</h2>
                 <div class="center-content">
-                    <div id="center-edit-mode" class="hide-on-export" style="width:100%; margin-bottom:20px; text-align:center;">
+                    <div id="center-edit-mode" class="hide-on-export" style="width:100%; margin-bottom:15px; text-align:center;">
                         <input type="text" id="spotifyUrl" placeholder="Paste Spotify URL..." style="margin-bottom:8px;">
                         <button onclick="fetchSpotifyData()" class="action-btn" style="width:auto; padding: 5px 20px;">Load Data</button>
                     </div>
@@ -499,32 +505,41 @@
             }
         }
 
-        // --- 4. EXPORT PDF FIX MARGINI DEFINITIVO ---
+        // --- 4. EXPORT PDF DYNAMICO ---
         function exportToPDF() {
             const toHide = document.querySelectorAll('.hide-on-export');
             toHide.forEach(el => el.classList.add('hidden'));
 
-            // Rimuovi temporaneamente il padding del body per l'export full-bleed
+            // Rimuovi padding e centra per l'export
             document.body.style.padding = '0';
             document.body.style.justifyContent = 'flex-start';
             
+            // COSTRUZIONE NOME FILE DINAMICO
+            let artistName = document.querySelector('.artist-input').value;
+            let playlistName = document.getElementById('plTitle').innerText;
+
+            if (artistName === 'ARTIST NAME') artistName = 'Artist';
+            if (playlistName === 'Playlist Title') playlistName = 'Playlist';
+
+            // Crea nome file: "Soundvertise Playlist Growth: Artist x Playlist.pdf"
+            let finalFilename = `Soundvertise Playlist Growth: ${artistName} x ${playlistName}.pdf`;
+
             const element = document.getElementById('canvas-area');
             
             const opt = {
                 margin:       0,
-                filename:     'Playlist_Growth_Plan.pdf',
+                filename:     finalFilename,
                 image:        { type: 'jpeg', quality: 1 },
                 html2canvas:  { 
                     scale: 2, 
                     useCORS: true, 
                     scrollX: 0, scrollY: 0
                 },
-                // Usa MM per la massima precisione A4
                 jsPDF:        { unit: 'mm', format: [297, 210], orientation: 'landscape' }
             };
 
             html2pdf().set(opt).from(element).save().then(() => {
-                // Ripristina lo stile per la visualizzazione a schermo
+                // Ripristina stile per la visualizzazione a schermo
                 toHide.forEach(el => el.classList.remove('hidden'));
                 document.body.style.padding = '20px';
                 document.body.style.justifyContent = 'center';
