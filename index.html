@@ -16,19 +16,18 @@
             --border-radius: 8px;
         }
 
-        /* Reset Globale */
-        html, body { margin: 0; padding: 0; width: 100%; -webkit-font-smoothing: antialiased; }
+        /* RESET TOTALE */
+        * { box-sizing: border-box; }
+        html, body { margin: 0; padding: 0; width: 100%; background-color: #000; }
 
         body {
-            background-color: #000;
             color: var(--text-main);
             font-family: 'Inter', sans-serif;
-            padding: 40px 0;
+            /* Padding per visualizzazione web comoda */
+            padding: 40px 0; 
             display: flex;
             flex-direction: column;
             align-items: center;
-            justify-content: flex-start;
-            box-sizing: border-box;
         }
 
         /* --- API CONFIG --- */
@@ -39,43 +38,32 @@
         }
         .api-config input { background: #333; border: 1px solid #555; color: white; padding: 4px; }
 
-        /* --- CONTAINER PRINCIPALE --- */
+        /* --- CONTAINER PER L'EXPORT --- */
         #export-content {
+            width: 1123px; /* Larghezza fissa */
             display: flex;
             flex-direction: column;
             align-items: center;
-            width: 100%;
-            background: #000;
         }
 
-        /* --- PDF PAGE (A4 Millimetrico) --- */
+        /* --- SINGOLA PAGINA PDF (1123x794px = A4 PX ESATTI) --- */
         .pdf-page {
             background: url('Fabhertz_aesthetic_background_wallpaper_for_a_website_landing_p_bbf86bfd-9b57-4afc-b01e-4da55c2315f3.jpeg') no-repeat center center;
             background-size: cover;
+            
             width: 1123px;
             height: 794px;
+            
             padding: 5px 50px 20px 50px; 
-            box-sizing: border-box;
+            
             display: flex;
             flex-direction: column;
             justify-content: flex-start;
             position: relative;
-            overflow: hidden;
-            margin-bottom: 50px; 
-            box-shadow: 0 0 50px rgba(0,0,0,0.5);
-        }
-
-        /* --- PAGINA NERA (SPACER) --- */
-        .pdf-page.spacer-page {
-            background: #000 !important; /* Nero puro */
-            justify-content: center;
-            align-items: center;
-            box-shadow: none;
-        }
-        .spacer-logo {
-            max-width: 300px;
-            opacity: 0.3; /* Logo in trasparenza al centro */
-            filter: grayscale(100%);
+            overflow: hidden; /* Taglia tutto ciò che esce */
+            
+            margin-bottom: 50px; /* Spazio visivo a schermo */
+            box-shadow: 0 0 50px rgba(0,0,0,0.5); /* Ombra a schermo */
         }
 
         /* --- HEADER --- */
@@ -115,7 +103,7 @@
             text-shadow: 0 2px 5px rgba(0,0,0,0.5);
         }
 
-        /* STILE NOME ARTISTA */
+        /* NOME ARTISTA (TEXT - Export) */
         .artist-name-display {
             font-size: 2.5rem;
             font-weight: 700;
@@ -128,6 +116,7 @@
             color: white;
         }
 
+        /* NOME ARTISTA (INPUT - Editing) */
         .artist-input {
             background: transparent;
             border: none;
@@ -162,7 +151,6 @@
             border: 1px solid rgba(255,255,255,0.1);
             height: 100%;
             overflow: hidden;
-            box-sizing: border-box;
         }
 
         h2 {
@@ -190,10 +178,11 @@
         .action-btn.locked { background: #222; color: #888; border: 1px solid #333; }
 
         label { display: block; margin-top: 5px; font-size: 0.8rem; color: #aaa; }
-        input, select { width: 100%; padding: 8px; margin-top: 4px; background: #2a2a2a; border: 1px solid #444; border-radius: 4px; color: white; font-size: 0.9rem; box-sizing: border-box; }
+        
+        input, select { width: 100%; padding: 8px; margin-top: 4px; background: #2a2a2a; border: 1px solid #444; border-radius: 4px; color: white; font-size: 0.9rem; }
         input[type="checkbox"] { width: auto !important; margin-right: 8px; transform: scale(1.2); cursor: pointer; }
 
-        /* --- LEFT/CENTER/RIGHT STYLES --- */
+        /* --- INTERIOR STYLES --- */
         #left-edit-mode, #left-view-mode { flex-grow: 1; overflow-y: auto; }
         .schedule-row { background: #252525; border: 1px solid #333; border-radius: 4px; padding: 8px; margin-bottom: 5px; }
         .schedule-header { display: flex; justify-content: space-between; font-size: 0.9rem; color: white; font-weight: 600; margin-bottom: 2px; }
@@ -229,27 +218,29 @@
         .total-display { margin-top: 15px; padding-top: 10px; border-top: 1px solid #555; font-size: 1.4rem; font-weight: bold; text-align: right; color: var(--accent-purple); }
         .budget-disclaimer { font-size: 0.75rem; color: #aaa; text-align: right; margin-top: 4px; font-style: italic; opacity: 0.8; }
 
-        /* --- STILI MODALITÀ EXPORT (FIX MARGINI DEFINITIVO) --- */
+        /* --- STILI MODALITÀ EXPORT (NO MARGINI, NO PADDING) --- */
         body.export-mode {
-            /* Disattiva flexbox e centra tutto a sinistra */
-            display: block !important; 
             padding: 0 !important;
             margin: 0 !important;
-            background: #000;
+            display: block !important;
+            width: 1123px !important;
         }
 
         body.export-mode #export-content {
-            /* Forza l'allineamento a sinistra */
-            width: 1123px !important;
             margin: 0 !important;
-            transform: none !important;
-            left: 0 !important;
+            padding: 0 !important;
         }
 
         body.export-mode .pdf-page {
-            margin-bottom: 0 !important;
+            margin: 0 !important;
             box-shadow: none !important;
-            margin-left: 0 !important; /* Sicurezza extra */
+            /* FORZA IL SALTO PAGINA DOPO OGNI PAGINA */
+            page-break-after: always; 
+        }
+        
+        /* Rimuovi break dopo l'ultima pagina per evitare pagina bianca finale */
+        body.export-mode .pdf-page:last-child {
+            page-break-after: avoid;
         }
 
         body.export-mode #artistInput { display: none; }
@@ -272,6 +263,7 @@
                 <img src="LOGO WHITE NO BACKGROUND .png" alt="Soundvertise" onerror="this.style.display='none'">
                 <div class="header-titles">
                     <h1>Playlist Growth Plan</h1>
+                    
                     <input type="text" id="artistInput" class="artist-input" placeholder="ARTIST NAME" value="ARTIST NAME" oninput="syncArtistName(this.value)">
                     <div id="artistDisplay" class="artist-name-display">ARTIST NAME</div>
                 </div>
@@ -323,10 +315,6 @@
             </div>
         </div>
 
-        <div class="pdf-page spacer-page">
-            <img src="LOGO WHITE NO BACKGROUND .png" class="spacer-logo" alt="" onerror="this.style.display='none'">
-        </div>
-
         <div class="pdf-page" id="page-2">
             <header>
                 <img src="LOGO WHITE NO BACKGROUND .png" alt="Soundvertise" onerror="this.style.display='none'">
@@ -364,16 +352,11 @@
     </div>
 
     <script>
-        // --- API KEY ---
         let hasExternalKeys = (typeof API_CONFIG !== 'undefined');
         if(hasExternalKeys) document.getElementById('apiBar').style.display = 'none';
 
-        // --- SYNC ---
-        function syncArtistName(val) {
-            document.getElementById('artistDisplay').innerText = val;
-        }
+        function syncArtistName(val) { document.getElementById('artistDisplay').innerText = val; }
 
-        // --- LOGIC ---
         let leftLocked = false;
         function generateSchedule() {
             const months = parseInt(document.getElementById('months').value);
@@ -410,9 +393,7 @@
                     list.innerHTML += `<div class="locked-schedule-item"><div><div class="locked-month">Month ${index + 1}</div><span class="locked-date">${dates}</span></div><div class="locked-cost">${cost}</div></div>`;
                 });
                 editMode.classList.add('hidden'); viewMode.classList.remove('hidden'); btn.innerText = "Edit Plan"; btn.classList.add('locked'); leftLocked = true;
-            } else {
-                editMode.classList.remove('hidden'); viewMode.classList.add('hidden'); btn.innerText = "Confirm & Lock"; btn.classList.remove('locked'); leftLocked = false;
-            }
+            } else { editMode.classList.remove('hidden'); viewMode.classList.add('hidden'); btn.innerText = "Confirm & Lock"; btn.classList.remove('locked'); leftLocked = false; }
         }
         async function getAccessToken() {
             let cid, csec; if (hasExternalKeys) { cid = API_CONFIG.clientId; csec = API_CONFIG.clientSecret; } else { cid = document.getElementById('clientId').value; csec = document.getElementById('clientSecret').value; }
@@ -444,11 +425,11 @@
             const toHide = document.querySelectorAll('.hide-on-export');
             toHide.forEach(el => el.classList.add('hidden'));
 
-            // Attiva modalità export (disabilita flexbox, margini 0)
+            // Attiva modalità export
             document.body.classList.add('export-mode');
             window.scrollTo(0,0);
 
-            // Sync
+            // Sync Name
             const artistVal = document.getElementById('artistInput').value;
             document.getElementById('artistDisplay').innerText = artistVal;
 
@@ -462,17 +443,15 @@
                 html2canvas:  { 
                     scale: 2, 
                     useCORS: true, 
-                    scrollX: 0, scrollY: 0,
-                    // NON usare windowWidth, lasciare automatico ma con CSS bloccato
+                    scrollX: 0, scrollY: 0
                 },
                 jsPDF: { 
                     unit: 'px', 
                     format: [1123, 794], 
                     orientation: 'landscape',
                     hotfixes: ["px_scaling"]
-                },
-                // Taglia dopo ogni div .pdf-page
-                pagebreak: { mode: 'css', after: '.pdf-page' }
+                }
+                // PAGEBREAK è gestito dal CSS 'page-break-after: always'
             };
 
             html2pdf().set(opt).from(element).save().then(() => {
