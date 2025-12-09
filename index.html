@@ -6,19 +6,18 @@
     <title>Soundvertise - Playlist Growth Plan</title>
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
     <script src="https://cdnjs.cloudflare.com/ajax/libs/html2pdf.js/0.10.1/html2pdf.bundle.min.js"></script>
-    
     <script src="secrets.js" onerror="console.log('Nessun file secrets.js trovato')"></script>
 
     <style>
         :root {
-            --glass-bg: rgba(20, 20, 20, 0.95);
+            --glass-bg: rgba(20, 20, 20, 0.92);
             --accent-purple: #9575cd;
             --text-main: #ffffff;
             --border-radius: 8px;
         }
 
         body {
-            background-color: #111;
+            background-color: #000;
             color: var(--text-main);
             font-family: 'Inter', sans-serif;
             margin: 0;
@@ -26,6 +25,7 @@
             display: flex;
             flex-direction: column;
             align-items: center;
+            justify-content: center;
             min-height: 100vh;
         }
 
@@ -36,20 +36,20 @@
         }
         .api-config input { background: #333; border: 1px solid #555; color: white; padding: 4px; }
 
-        /* --- CANVAS AREA (FORZATURA DIMENSIONI A4 LANDSCAPE) --- */
-        /* 297mm x 210mm è la dimensione esatta A4 */
+        /* --- CANVAS AREA (Fix Pixel Perfect A4 Landscape) --- */
+        /* 1123px x 794px = A4 Landscape @ 96 DPI standard */
         #canvas-area {
             background: url('Fabhertz_aesthetic_background_wallpaper_for_a_website_landing_p_bbf86bfd-9b57-4afc-b01e-4da55c2315f3.jpeg') no-repeat center center;
             background-size: cover;
-            width: 297mm;
-            height: 210mm;
-            padding: 20mm; /* Margini interni di stampa */
+            width: 1123px;
+            height: 794px;
+            padding: 40px;
             box-sizing: border-box;
             display: flex;
             flex-direction: column;
             position: relative;
-            box-shadow: 0 0 40px rgba(0,0,0,0.5); /* Ombra estetica per la web view */
-            overflow: hidden; /* Evita sbavature nel PDF */
+            box-shadow: 0 0 50px rgba(0,0,0,0.8);
+            overflow: hidden; 
         }
 
         /* --- HEADER --- */
@@ -57,16 +57,17 @@
             display: flex;
             align-items: center;
             justify-content: space-between;
-            margin-bottom: 15px;
+            margin-bottom: 20px;
             background: rgba(0,0,0,0.6);
-            padding: 10px 20px;
+            padding: 15px 30px;
             border-radius: 12px;
-            height: 80px;
+            height: 100px; /* Header più alto per logo grande */
         }
 
         header img {
-            max-height: 70px; /* LOGO PIÙ GRANDE */
+            max-height: 130px; /* LOGO MOLTO PIÙ GRANDE */
             width: auto;
+            object-fit: contain;
         }
 
         .header-titles {
@@ -74,14 +75,15 @@
             display: flex;
             flex-direction: column;
             align-items: flex-end;
+            justify-content: center;
         }
 
         .header-titles h1 {
-            font-size: 0.9rem;
+            font-size: 1rem;
             margin: 0 0 5px 0;
             text-transform: uppercase;
             letter-spacing: 3px;
-            opacity: 0.8;
+            opacity: 0.9;
         }
 
         .artist-input {
@@ -89,10 +91,10 @@
             border: none;
             border-bottom: 2px solid var(--accent-purple);
             color: white;
-            font-size: 2rem; /* NOME ARTISTA GRANDE */
+            font-size: 2.2rem;
             font-weight: 700;
             text-align: right;
-            width: 400px;
+            width: 450px;
             padding: 0;
         }
         .artist-input:focus { outline: none; border-bottom-color: #fff; }
@@ -100,8 +102,8 @@
         /* --- MAIN GRID --- */
         .main-container {
             display: grid;
-            grid-template-columns: 280px 1fr 1fr; /* Colonna sinistra fissa, resto flessibile */
-            gap: 15px;
+            grid-template-columns: 300px 1fr 1fr;
+            gap: 20px;
             height: 100%;
             overflow: hidden;
         }
@@ -109,21 +111,21 @@
         .col {
             background: var(--glass-bg);
             border-radius: var(--border-radius);
-            padding: 15px;
+            padding: 20px;
             display: flex;
             flex-direction: column;
             border: 1px solid rgba(255,255,255,0.1);
-            height: 100%; /* Occupa tutta l'altezza disponibile */
-            overflow: hidden; /* Niente scroll nel PDF */
+            height: 100%;
+            overflow: hidden;
             box-sizing: border-box;
         }
 
         h2 {
-            font-size: 1rem;
+            font-size: 1.1rem;
             text-transform: uppercase;
             border-bottom: 1px solid #444;
-            padding-bottom: 8px;
-            margin: 0 0 10px 0;
+            padding-bottom: 10px;
+            margin: 0 0 15px 0;
             color: var(--accent-purple);
             letter-spacing: 1px;
             flex-shrink: 0;
@@ -132,21 +134,36 @@
         /* --- BUTTONS --- */
         .action-btn {
             background: #333; color: white; border: 1px solid #555;
-            padding: 8px; border-radius: 4px; cursor: pointer;
-            width: 100%; margin-top: auto; /* Spinge in basso */
+            padding: 10px; border-radius: 6px; cursor: pointer;
+            width: 100%; margin-top: auto;
             font-size: 0.9rem; font-weight: 600;
             flex-shrink: 0;
         }
         .action-btn:hover { background: var(--accent-purple); border-color: var(--accent-purple); }
         .action-btn.locked { background: #222; color: #888; border: 1px solid #333; }
 
-        /* --- INPUTS --- */
-        label { display: block; margin-top: 5px; font-size: 0.75rem; color: #aaa; }
-        input, select {
-            width: 100%; padding: 6px; margin-top: 2px;
-            background: #2a2a2a; border: 1px solid #444;
-            border-radius: 4px; color: white; font-size: 0.9rem;
+        /* --- INPUTS FIX --- */
+        label { display: block; margin-top: 5px; font-size: 0.8rem; color: #aaa; }
+        
+        /* Regola generale per input di testo e select */
+        input[type="text"], input[type="number"], input[type="date"], select, input[type="password"] {
+            width: 100%; 
+            padding: 8px; 
+            margin-top: 4px;
+            background: #2a2a2a; 
+            border: 1px solid #444;
+            border-radius: 4px; 
+            color: white; 
+            font-size: 0.9rem;
             box-sizing: border-box;
+        }
+
+        /* FIX CHECKBOXES: Reset width per evitare che siano giganti */
+        input[type="checkbox"] {
+            width: auto !important;
+            margin-right: 8px;
+            transform: scale(1.2); /* Leggermente più grandi */
+            cursor: pointer;
         }
 
         /* --- LEFT COL: Schedule --- */
@@ -154,21 +171,21 @@
         
         .schedule-row {
             background: #252525; border: 1px solid #333; border-radius: 4px;
-            padding: 8px; margin-bottom: 5px;
+            padding: 10px; margin-bottom: 8px;
         }
         .schedule-header {
             display: flex; justify-content: space-between;
-            font-size: 0.85rem; color: white; font-weight: 600; margin-bottom: 2px;
+            font-size: 0.9rem; color: white; font-weight: 600; margin-bottom: 4px;
         }
-        .schedule-dates { font-size: 0.75rem; color: #aaa; }
+        .schedule-dates { font-size: 0.8rem; color: #aaa; }
         
         .locked-schedule-item {
             display: flex; justify-content: space-between; align-items: center;
-            padding: 10px 0; border-bottom: 1px solid #333;
+            padding: 12px 0; border-bottom: 1px solid #333;
         }
-        .locked-month { font-weight: 600; color: var(--accent-purple); font-size: 1rem; }
-        .locked-date { font-size: 0.8rem; color: #ccc; }
-        .locked-cost { font-size: 1.1rem; font-weight: 700; color: white; }
+        .locked-month { font-weight: 600; color: var(--accent-purple); font-size: 1.1rem; }
+        .locked-date { font-size: 0.85rem; color: #ccc; }
+        .locked-cost { font-size: 1.2rem; font-weight: 700; color: white; }
 
         /* --- CENTER COL: Spotify --- */
         .center-content {
@@ -176,43 +193,56 @@
             justify-content: center; height: 100%; flex-grow: 1;
         }
         .artwork-container {
-            width: 220px; height: 220px;
-            box-shadow: 0 10px 30px rgba(0,0,0,0.6);
-            margin-bottom: 15px; border-radius: 6px;
+            width: 250px; height: 250px;
+            box-shadow: 0 15px 40px rgba(0,0,0,0.6);
+            margin-bottom: 20px; border-radius: 8px;
             overflow: hidden; background: #000;
         }
         .artwork-container img { width: 100%; height: 100%; object-fit: cover; }
-        .playlist-title { font-size: 1.4rem; font-weight: 700; margin: 5px 0; line-height: 1.2; text-align: center;}
+        .playlist-title { font-size: 1.5rem; font-weight: 700; margin: 5px 0; line-height: 1.2; text-align: center;}
         .playlist-owner { font-size: 1rem; color: #999; margin-bottom: 15px; text-align: center;}
         .playlist-followers {
             background: rgba(255,255,255,0.1); border: 1px solid rgba(255,255,255,0.2);
             padding: 8px 16px; border-radius: 20px;
-            color: #fff; font-size: 0.9rem; font-weight: 700;
+            color: #fff; font-size: 1rem; font-weight: 700;
             text-transform: uppercase; letter-spacing: 1px;
         }
 
-        /* --- RIGHT COL: Tiers (FIXED VISIBILITY) --- */
-        #right-edit-mode { overflow-y: auto; height: 90%; }
+        /* --- RIGHT COL: Tiers FIX --- */
+        #right-edit-mode { overflow-y: auto; height: 90%; padding-right: 5px; }
         #right-view-mode { overflow-y: auto; height: 90%; }
 
-        .tier-group { margin-bottom: 10px; border: 1px solid #444; border-radius: 6px; overflow: hidden; background: #1a1a1a; }
+        .tier-group { margin-bottom: 15px; border: 1px solid #444; border-radius: 6px; overflow: hidden; background: #1a1a1a; }
         .tier-header { 
-            background: #333; padding: 6px 10px; 
+            background: #333; padding: 8px 12px; 
             display: flex; justify-content: space-between; align-items: center;
         }
-        .tier-title { font-weight: bold; font-size: 0.9rem; color: #fff; text-transform: uppercase;}
+        .tier-title { font-weight: bold; font-size: 0.95rem; color: #fff; text-transform: uppercase;}
         
-        .tier-countries { padding: 8px; display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 5px; } /* 3 colonne in edit */
-        .country-label { font-size: 0.75rem; display: flex; align-items: center; color: #ddd; }
+        /* GRIGLIA PAESI AGGIUSTATA: 2 Colonne per leggibilità */
+        .tier-countries { 
+            padding: 10px; 
+            display: grid; 
+            grid-template-columns: 1fr 1fr; /* 2 Colonne invece di 3 per dare spazio ai nomi */
+            gap: 8px; 
+        } 
+        .country-label { 
+            font-size: 0.85rem; 
+            display: flex; 
+            align-items: center; 
+            color: #eee; 
+            margin-top: 0; /* Override del margine generico */
+            cursor: pointer;
+        }
         
-        /* LOCKED VIEW (Clean List) */
-        .locked-tier-block { margin-bottom: 20px; }
+        /* LOCKED VIEW */
+        .locked-tier-block { margin-bottom: 25px; }
         .locked-tier-title { 
             color: var(--accent-purple); font-weight: 700; font-size: 1.1rem; 
-            text-transform: uppercase; margin-bottom: 8px; border-bottom: 1px solid #444; padding-bottom: 2px;
+            text-transform: uppercase; margin-bottom: 6px; border-bottom: 1px solid #444; padding-bottom: 4px;
         }
         .locked-country-list { 
-            font-size: 0.95rem; line-height: 1.6; color: #eee; /* Nomi paesi più grandi e visibili */
+            font-size: 0.95rem; line-height: 1.5; color: #eee; 
         }
 
         /* --- EXPORT BUTTON --- */
@@ -228,8 +258,8 @@
 
         .hidden { display: none !important; }
         .total-display {
-            margin-top: 10px; padding-top: 10px; border-top: 1px solid #555;
-            font-size: 1.3rem; font-weight: bold; text-align: right; color: var(--accent-purple);
+            margin-top: 15px; padding-top: 10px; border-top: 1px solid #555;
+            font-size: 1.4rem; font-weight: bold; text-align: right; color: var(--accent-purple);
         }
 
     </style>
@@ -247,7 +277,7 @@
             <img src="LOGO WHITE NO BACKGROUND .png" alt="Soundvertise" onerror="this.style.display='none'">
             <div class="header-titles">
                 <h1>Playlist Growth Plan</h1>
-                <input type="text" class="artist-input" placeholder="NOME ARTISTA" value="NOME ARTISTA">
+                <input type="text" class="artist-input" placeholder="ARTIST NAME" value="ARTIST NAME">
             </div>
         </header>
 
@@ -257,7 +287,7 @@
                 <h2>Campaign Timeline</h2>
                 
                 <div id="left-edit-mode">
-                    <label>Durata</label>
+                    <label>Duration</label>
                     <select id="months" onchange="generateSchedule()">
                         <option value="1">1 Month</option>
                         <option value="2">2 Months</option>
@@ -266,7 +296,7 @@
                         <option value="5">5 Months</option>
                         <option value="6">6 Months</option>
                     </select>
-                    <label>Data Inizio</label>
+                    <label>Start Date</label>
                     <input type="date" id="startDate" onchange="generateSchedule()">
                     <div id="scheduleContainer" style="margin-top:15px;"></div>
                 </div>
@@ -283,7 +313,7 @@
                 <h2>Playlist Preview</h2>
                 <div class="center-content">
                     <div id="center-edit-mode" class="hide-on-export" style="width:100%; margin-bottom:20px; text-align:center;">
-                        <input type="text" id="spotifyUrl" placeholder="Incolla URL Spotify..." style="margin-bottom:8px;">
+                        <input type="text" id="spotifyUrl" placeholder="Paste Spotify URL..." style="margin-bottom:8px;">
                         <button onclick="fetchSpotifyData()" class="action-btn" style="width:auto; padding: 5px 20px;">Load Data</button>
                     </div>
 
@@ -328,7 +358,6 @@
             const startDateInput = document.getElementById('startDate').value;
             const container = document.getElementById('scheduleContainer');
             
-            // Mantieni valori precedenti
             const oldInputs = document.querySelectorAll('.monthly-cost');
             const oldValues = Array.from(oldInputs).map(i => i.value);
 
@@ -412,7 +441,7 @@
             if (hasExternalKeys) { cid = API_CONFIG.clientId; csec = API_CONFIG.clientSecret; }
             else { cid = document.getElementById('clientId').value; csec = document.getElementById('clientSecret').value; }
 
-            if(!cid || !csec) { alert("Mancano le API Keys"); return null; }
+            if(!cid || !csec) { alert("API Keys Missing"); return null; }
 
             try {
                 const result = await fetch('https://accounts.spotify.com/api/token', {
@@ -428,7 +457,7 @@
         async function fetchSpotifyData() {
             const url = document.getElementById('spotifyUrl').value;
             const match = url.match(/playlist\/([a-zA-Z0-9]+)/);
-            if (!match) return alert("URL Spotify non valido");
+            if (!match) return alert("Invalid URL");
             
             const token = await getAccessToken();
             if (!token) return;
@@ -442,10 +471,10 @@
                 document.getElementById('plOwner').innerText = `by ${data.owner.display_name}`;
                 document.getElementById('plFollowers').innerText = `${data.followers.total.toLocaleString()} FOLLOWERS`;
                 if (data.images.length > 0) document.getElementById('plArtwork').src = data.images[0].url;
-            } catch (e) { alert("Errore nel caricamento dati"); }
+            } catch (e) { alert("Error fetching data"); }
         }
 
-        // --- 3. GESTIONE PAESI (Pulita, Senza descrizioni) ---
+        // --- 3. GESTIONE PAESI ---
         let rightLocked = false;
         const tiersData = [
             {
@@ -499,7 +528,6 @@
                 tiersData.forEach((tier, index) => {
                     const groupInputs = document.querySelectorAll(`#tlist-${index} input:checked:not(:disabled)`);
                     if (groupInputs.length > 0) {
-                        // Creazione lista pulita comma-separated
                         const countriesText = Array.from(groupInputs).map(i => i.value).join(', ');
                         
                         list.innerHTML += `
@@ -536,8 +564,8 @@
                 filename:     'Playlist_Growth_Plan.pdf',
                 image:        { type: 'jpeg', quality: 1 },
                 html2canvas:  { scale: 2, useCORS: true, scrollX: 0, scrollY: 0 },
-                // Dimensioni esatte A4 Landscape in mm
-                jsPDF:        { unit: 'mm', format: [297, 210], orientation: 'landscape' }
+                // DIMENSIONI PIXEL FISSE = 0 MARGINI BIANCHI
+                jsPDF:        { unit: 'px', format: [1123, 794], orientation: 'landscape', hotfixes: ["px_scaling"] }
             };
 
             html2pdf().set(opt).from(element).save().then(() => {
