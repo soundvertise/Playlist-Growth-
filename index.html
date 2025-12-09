@@ -1,354 +1,493 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="it">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Service Cost Calculator</title>
-    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600&display=swap" rel="stylesheet">
+    <title>Soundvertise - Playlist Growth Calculator</title>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700&display=swap" rel="stylesheet">
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/html2pdf.js/0.10.1/html2pdf.bundle.min.js"></script>
+    
     <style>
+        :root {
+            --glass-bg: rgba(26, 26, 26, 0.95);
+            --accent-purple: #9575cd;
+            --text-main: #ffffff;
+            --border-radius: 12px;
+        }
+
         body {
             background: url('Fabhertz_aesthetic_background_wallpaper_for_a_website_landing_p_bbf86bfd-9b57-4afc-b01e-4da55c2315f3.jpeg') no-repeat center center fixed;
+            background-color: #121212; /* Fallback */
             background-size: cover;
-            color: #ffffff;
+            color: var(--text-main);
             font-family: 'Inter', sans-serif;
             margin: 0;
+            padding: 20px;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            min-height: 100vh;
+        }
+
+        /* --- HEADER --- */
+        header {
+            text-align: center;
+            margin-bottom: 20px;
+            width: 100%;
+        }
+
+        header img {
+            max-width: 200px;
+            margin-bottom: 10px;
+        }
+
+        .header-titles h1 {
+            font-size: 2.5rem;
+            margin: 0;
+            text-transform: uppercase;
+            letter-spacing: 2px;
+        }
+
+        .artist-input-container {
+            margin-top: 15px;
+        }
+
+        .artist-input {
+            background: transparent;
+            border: none;
+            border-bottom: 2px solid var(--accent-purple);
+            color: white;
+            font-size: 1.5rem;
+            text-align: center;
+            width: 300px;
+            padding: 5px;
+        }
+        .artist-input:focus {
+            outline: none;
+            border-bottom-color: #fff;
+        }
+
+        /* --- MAIN GRID LAYOUT --- */
+        .main-container {
+            display: grid;
+            grid-template-columns: 1fr 1fr 1fr;
+            gap: 20px;
+            width: 95%;
+            max-width: 1400px;
+            margin-bottom: 30px;
+        }
+
+        .col {
+            background: var(--glass-bg);
+            border-radius: var(--border-radius);
+            padding: 20px;
+            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.5);
+            display: flex;
+            flex-direction: column;
+        }
+
+        h2 {
+            font-size: 1.2rem;
+            text-transform: uppercase;
+            border-bottom: 1px solid #444;
+            padding-bottom: 10px;
+            margin-top: 0;
+            margin-bottom: 20px;
+            color: var(--accent-purple);
+        }
+
+        label {
+            display: block;
+            margin-top: 15px;
+            font-size: 0.9rem;
+            color: #ccc;
+        }
+
+        input, select {
+            width: 100%;
+            padding: 10px;
+            margin-top: 5px;
+            background: #333;
+            border: 1px solid #444;
+            border-radius: 6px;
+            color: white;
+            font-family: 'Inter', sans-serif;
+            box-sizing: border-box;
+        }
+
+        /* --- LEFT COL: Campaign Data --- */
+        .date-list {
+            margin-top: 20px;
+            font-size: 0.9rem;
+            background: #222;
+            padding: 10px;
+            border-radius: 6px;
+        }
+        .date-row {
+            display: flex;
+            justify-content: space-between;
+            margin-bottom: 5px;
+            border-bottom: 1px solid #333;
+            padding-bottom: 5px;
+        }
+        .financials {
+            margin-top: auto;
+            border-top: 1px solid #444;
+            padding-top: 15px;
+        }
+
+        /* --- CENTER COL: Spotify Card --- */
+        .spotify-section {
             display: flex;
             flex-direction: column;
             align-items: center;
             text-align: center;
-            padding-top: 30px;
+            height: 100%;
         }
-        header img {
-            max-width: 250px;
-            margin-bottom: 30px;
-        }
-        .container {
-            display: flex;
-            justify-content: flex-start;
-            gap: 30px;
-            width: 90%;
-            max-width: 1200px;
-            flex-wrap: nowrap;
-        }
-        .calculator, .summary, .discount-panel {
-            padding: 20px;
-            background: rgba(26, 26, 26, 0.9);
-            border-radius: 10px;
-            box-shadow: 0 0 15px rgba(0, 0, 0, 0.5);
-            max-width: 350px;
+
+        .spotify-preview {
+            margin-top: 30px;
             width: 100%;
-            text-align: center;
+            display: none; /* Hidden until url entered */
+            flex-direction: column;
+            align-items: center;
         }
-        h1, h2 {
-            font-size: 2em;
+
+        .artwork-container {
+            width: 250px;
+            height: 250px;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.5);
             margin-bottom: 20px;
+            overflow: hidden;
+            border-radius: 8px;
         }
-        h3 {
-            margin-bottom: 10px;
-            font-size: 1.3em;
+
+        .artwork-container img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
         }
-        label {
-            font-size: 1.2em;
+
+        .playlist-title {
+            font-size: 1.4rem;
+            font-weight: 700;
+            margin: 10px 0 5px 0;
         }
-        .playlist-group {
-            margin: 10px 0;
-            text-align: center;
+
+        .playlist-followers {
+            color: #b3b3b3;
+            font-size: 1rem;
+            font-weight: 600;
+            text-transform: uppercase;
+            letter-spacing: 1px;
         }
-        .playlist-group label {
-            display: block;
-            margin-top: 10px;
-            font-weight: bold;
-            text-align: center;
+
+        /* --- RIGHT COL: Tiers --- */
+        .tiers-container {
+            overflow-y: auto;
+            max-height: 600px;
+            padding-right: 5px;
         }
-        .playlist-group .campaign-option {
-            font-size: 0.9em;
-            font-weight: normal;
+
+        /* Custom Scrollbar */
+        .tiers-container::-webkit-scrollbar { width: 6px; }
+        .tiers-container::-webkit-scrollbar-track { background: #1a1a1a; }
+        .tiers-container::-webkit-scrollbar-thumb { background: #444; border-radius: 3px; }
+
+        .tier-group {
+            margin-bottom: 20px;
+            border: 1px solid #444;
+            border-radius: 8px;
+            overflow: hidden;
         }
-        input[type="radio"] {
-            margin-right: 5px;
-        }
-        select, button {
-            font-size: 1em;
-            margin: 10px 0;
+
+        .tier-header {
+            background: #333;
             padding: 10px;
-            width: 90%;
-            border: none;
-            border-radius: 5px;
-        }
-        select {
-            background-color: #262626;
-            color: #ffffff;
-        }
-        button {
-            background-color: #ffffff;
-            color: #000000;
-            font-weight: bold;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
             cursor: pointer;
         }
-        button:hover {
-            background-color: #9575cd;
-            color: #ffffff;
+
+        .tier-header h3 {
+            margin: 0;
+            font-size: 1rem;
         }
-        .result {
-            margin-top: 20px;
-            font-size: 1.5em;
+
+        .tier-countries {
+            padding: 10px;
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 5px;
+        }
+
+        .country-check {
+            display: flex;
+            align-items: center;
+            font-size: 0.85rem;
+            cursor: pointer;
+        }
+
+        .country-check input {
+            width: auto;
+            margin: 0 8px 0 0;
+        }
+
+        .disabled-tier {
+            opacity: 0.4;
+            pointer-events: none;
+        }
+
+        /* --- PDF BUTTON --- */
+        .export-btn {
+            background-color: white;
+            color: black;
+            border: none;
+            padding: 15px 40px;
+            font-size: 1.2rem;
             font-weight: bold;
-            color: #ffffff;
-        }
-        .summary-list {
-            font-size: 1em;
-            line-height: 1.5;
-            white-space: normal;
-            text-align: left;
-        }
-        /* Color classes for playlist discounts */
-        .discount-blue { color: #00BFFF; }   /* D1 playlist (>1) */
-        .discount-fuchsia { color: #FF00FF; }/* D2 playlist (>3) */
-        .discount-pink { color: #FFC0CB; }   /* D3 playlist (>6) */
-
-        /* Months discount colors */
-        .discount-yellow { color: #FFFF00; } /* D1 months (>3) */
-        .discount-orange { color: #FFA500; } /* D2 months (>5) */
-
-        .calculator { order: 1; }
-        .summary { order: 2; text-align: center; }
-        .discount-panel { order: 3; text-align: center; }
-
-        .disclaimer {
-            font-size: 0.9em;
-            font-style: italic;
+            border-radius: 30px;
+            cursor: pointer;
+            transition: all 0.3s ease;
             margin-top: 20px;
-            color: #ffffff;
+            box-shadow: 0 0 20px rgba(255, 255, 255, 0.2);
+        }
+
+        .export-btn:hover {
+            background-color: var(--accent-purple);
+            color: white;
+            transform: scale(1.05);
+        }
+
+        /* Helper for PDF Export to hide button */
+        .hide-on-pdf {
+            display: block;
+        }
+
+        /* Responsive */
+        @media (max-width: 1024px) {
+            .main-container {
+                grid-template-columns: 1fr;
+            }
+            .artist-input {
+                width: 100%;
+            }
         }
     </style>
 </head>
 <body>
-    <header>
-        <img src="LOGO WHITE NO BACKGROUND .png" alt="Soundvertise Logo">
-    </header>
-    <div class="container">
-        <div id="content" class="calculator">
-            <h1>Service Cost Calculator</h1>
-            <div id="playlist-options"></div>
-            <label for="num-playlist">Number Of Playlists:</label>
-            <select id="num-playlist" onchange="updatePlaylists()">
-                <option value="1" selected>1 Playlist</option>
-                <option value="2">2 Playlists</option>
-                <option value="3">3 Playlists</option>
-                <option value="4">4 Playlists</option>
-                <option value="5">5 Playlists</option>
-                <option value="6">6 Playlists</option>
-                <option value="7">7 Playlists</option>
-                <option value="8">8 Playlists</option>
-                <!-- ADDED OPTIONS FOR 9 AND 10 PLAYLISTS -->
-                <option value="9">9 Playlists</option>
-                <option value="10">10 Playlists</option>
-            </select>
 
-            <label for="durata">Promotion Duration (Months):</label>
-            <select id="durata">
-                <option value="1" selected>1 month</option>
-                <option value="2">2 months</option>
-                <option value="3">3 months</option>
-                <option value="4">4 months</option>
-                <option value="5">5 months</option>
-                <option value="6">6 months</option>
-            </select>
+    <div id="canvas-area">
+        <header>
+            <img src="LOGO WHITE NO BACKGROUND .png" alt="Soundvertise" onerror="this.style.display='none'">
+            <div class="header-titles">
+                <h1>Playlist Growth</h1>
+                <div class="artist-input-container">
+                    <input type="text" class="artist-input" placeholder="Nome Artista" value="Nome Artista">
+                </div>
+            </div>
+        </header>
 
-            <button onclick="calculateCost()">Calculate Cost</button>
-            <div class="result" id="result"></div>
-        </div>
+        <div class="main-container">
+            <div class="col col-left">
+                <h2>Campaign Details</h2>
+                
+                <label for="months">Durata Campagna (Mesi)</label>
+                <select id="months" onchange="calculateDates()">
+                    <option value="1">1 Mese</option>
+                    <option value="2">2 Mesi</option>
+                    <option value="3">3 Mesi</option>
+                    <option value="4">4 Mesi</option>
+                    <option value="5">5 Mesi</option>
+                    <option value="6">6 Mesi</option>
+                    <option value="12">12 Mesi</option>
+                </select>
 
-        <div class="summary">
-            <h2>Summarize</h2>
-            <div id="summary-info" class="summary-list"></div>
-        </div>
+                <label for="startDate">Data Inizio</label>
+                <input type="date" id="startDate" onchange="calculateDates()">
 
-        <div class="discount-panel">
-            <h2>Discounts</h2>
-            <h3>Number Of Playlists</h3>
-            <p><span class="discount-blue">Discount 1:</span> More than 1 playlist</p>
-            <p><span class="discount-fuchsia">Discount 2:</span> More than 3 playlists</p>
-            <p><span class="discount-pink">Discount 3:</span> More than 6 playlists</p>
+                <div id="scheduleOutput" class="date-list">
+                    <div style="text-align:center; opacity:0.6;">Seleziona una data di inizio</div>
+                </div>
 
-            <h3>Months</h3>
-            <p><span class="discount-yellow">Discount 1:</span> More than 3 months</p>
-            <p><span class="discount-orange">Discount 2:</span> More than 5 months</p>
+                <div class="financials">
+                    <label for="serviceCost">Costo Mensile Servizio (€)</label>
+                    <input type="number" id="serviceCost" placeholder="0.00">
+                    
+                    <label for="budgetCost">Budget Mensile Ads (€)</label>
+                    <input type="number" id="budgetCost" placeholder="0.00">
+                </div>
+            </div>
 
-            <div class="disclaimer">
-                If Playlist 1 is already active and optimized, we offer a €50 discount on the activation fee
+            <div class="col col-center">
+                <h2>Playlist Preview</h2>
+                
+                <div class="spotify-section">
+                    <input type="text" id="spotifyUrl" placeholder="Incolla URL Playlist Spotify..." onchange="fetchSpotifyData()">
+                    
+                    <div class="spotify-preview" id="spotifyPreview">
+                        <div class="artwork-container">
+                            <img id="plArtwork" src="https://via.placeholder.com/300x300/1a1a1a/ffffff?text=No+Image" alt="Playlist Artwork">
+                        </div>
+                        <div class="playlist-title" id="plTitle">Titolo Playlist</div>
+                        <div class="playlist-followers" id="plFollowers">0 Followers</div>
+                        <br>
+                        <small style="color:#666; font-style:italic;">Spotify Verified</small>
+                    </div>
+                </div>
+            </div>
+
+            <div class="col col-right">
+                <h2>Target Countries</h2>
+                <div class="tiers-container" id="tiersContainer">
+                    </div>
             </div>
         </div>
     </div>
 
+    <button class="export-btn hide-on-pdf" onclick="generatePDF()">Export PDF</button>
+
     <script>
-        const priceTable = {
-            1: { new_campaign:200, renew_2_mesi:100, renew_3_mesi:100, renew_4_mesi:80, renew_5_mesi:80, renew_6_mesi:70 },
-            2: { new_campaign:100, renew_2_mesi:50,  renew_3_mesi:50,  renew_4_mesi:40, renew_5_mesi:40, renew_6_mesi:35 },
-            3: { new_campaign:100, renew_2_mesi:50,  renew_3_mesi:50,  renew_4_mesi:40, renew_5_mesi:40, renew_6_mesi:35 },
-            4: { new_campaign:80,  renew_2_mesi:40,  renew_3_mesi:40,  renew_4_mesi:35, renew_5_mesi:35, renew_6_mesi:30 },
-            5: { new_campaign:80,  renew_2_mesi:40,  renew_3_mesi:40,  renew_4_mesi:35, renew_5_mesi:35, renew_6_mesi:30 },
-            6: { new_campaign:80,  renew_2_mesi:40,  renew_3_mesi:40,  renew_4_mesi:35, renew_5_mesi:35, renew_6_mesi:30 },
-            7: { new_campaign:65,  renew_2_mesi:35,  renew_3_mesi:35,  renew_4_mesi:30, renew_5_mesi:30, renew_6_mesi:25 },
-            8: { new_campaign:65,  renew_2_mesi:35,  renew_3_mesi:35,  renew_4_mesi:30, renew_5_mesi:30, renew_6_mesi:25 },
-            // ADDED SAME PRICE DATA FOR 9 AND 10 AS FOR 7 AND 8
-            9: { new_campaign:65,  renew_2_mesi:35,  renew_3_mesi:35,  renew_4_mesi:30, renew_5_mesi:30, renew_6_mesi:25 },
-            10: { new_campaign:65, renew_2_mesi:35,  renew_3_mesi:35,  renew_4_mesi:30, renew_5_mesi:30, renew_6_mesi:25 },
+        // --- 1. GESTIONE DATE (Ciclo 28 Giorni) ---
+        function calculateDates() {
+            const months = parseInt(document.getElementById('months').value);
+            const startDateInput = document.getElementById('startDate').value;
+            const output = document.getElementById('scheduleOutput');
+            
+            if (!startDateInput) return;
+
+            let currentDate = new Date(startDateInput);
+            let html = '';
+
+            for (let i = 1; i <= months; i++) {
+                // Formatta data inizio
+                let startStr = currentDate.toLocaleDateString('it-IT');
+                
+                // Calcola data fine (inizio + 27 giorni = 28 giorni totali)
+                let endDate = new Date(currentDate);
+                endDate.setDate(currentDate.getDate() + 27); 
+                let endStr = endDate.toLocaleDateString('it-IT');
+
+                html += `
+                    <div class="date-row">
+                        <span>Mese ${i}</span>
+                        <span style="color:var(--accent-purple)">${startStr} - ${endStr}</span>
+                    </div>
+                `;
+
+                // Setta la data per il prossimo ciclo (fine + 1 giorno)
+                currentDate.setDate(currentDate.getDate() + 28);
+            }
+
+            output.innerHTML = html;
+        }
+
+        // --- 2. SIMULAZIONE SPOTIFY ---
+        // Nota: Senza backend non possiamo fare fetch reale. Simuliamo l'UI.
+        function fetchSpotifyData() {
+            const url = document.getElementById('spotifyUrl').value;
+            const preview = document.getElementById('spotifyPreview');
+            const img = document.getElementById('plArtwork');
+            const title = document.getElementById('plTitle');
+            const followers = document.getElementById('plFollowers');
+
+            if (url.length > 5) {
+                preview.style.display = 'flex';
+                // Usiamo un'immagine dummy randomica per simulare l'artwork
+                img.src = "https://picsum.photos/300/300?random=1"; 
+                title.innerText = "Best Hits & Growth";
+                followers.innerText = "124,593 Followers";
+            } else {
+                preview.style.display = 'none';
+            }
+        }
+
+        // --- 3. GESTIONE TIERS E PAESI ---
+        const tiersData = {
+            "Tier 1 (Premium)": ["USA", "UK", "Canada", "Australia", "Germany", "France", "Japan", "Netherlands", "Sweden"],
+            "Tier 2 (Standard)": ["Italy", "Spain", "Brazil", "Mexico", "Poland", "Belgium", "Austria", "Switzerland", "Norway", "Finland"],
+            "Tier 3 (Emerging)": ["Turkey", "India", "Indonesia", "Philippines", "Thailand", "Vietnam", "Argentina", "Chile", "Colombia"]
         };
 
-        function updatePlaylists() {
-            const numPlaylists = parseInt(document.getElementById("num-playlist").value);
-            const playlistOptions = document.getElementById("playlist-options");
-            playlistOptions.innerHTML = '';
-
-            for (let i = 1; i <= numPlaylists; i++) {
-                const div = document.createElement('div');
-                div.className = 'playlist-group';
-                div.innerHTML = `
-                    <label>Playlist ${i}:</label>
-                    <label class="campaign-option"><input type="radio" name="playlist-${i}" value="new" checked> New Campaign</label>
-                    <label class="campaign-option"><input type="radio" name="playlist-${i}" value="renew"> Renew</label>
+        function renderTiers() {
+            const container = document.getElementById('tiersContainer');
+            
+            Object.keys(tiersData).forEach((tierName, index) => {
+                const countries = tiersData[tierName];
+                
+                // Crea Header del Tier
+                const groupDiv = document.createElement('div');
+                groupDiv.className = 'tier-group';
+                
+                const header = document.createElement('div');
+                header.className = 'tier-header';
+                header.innerHTML = `
+                    <h3>${tierName}</h3>
+                    <input type="checkbox" checked onchange="toggleTier(this, 'tier-list-${index}')">
                 `;
-                playlistOptions.appendChild(div);
-            }
+                
+                // Crea lista paesi
+                const listDiv = document.createElement('div');
+                listDiv.className = 'tier-countries';
+                listDiv.id = `tier-list-${index}`;
+                
+                countries.forEach(country => {
+                    const label = document.createElement('label');
+                    label.className = 'country-check';
+                    label.innerHTML = `<input type="checkbox" checked> ${country}`;
+                    listDiv.appendChild(label);
+                });
+
+                groupDiv.appendChild(header);
+                groupDiv.appendChild(listDiv);
+                container.appendChild(groupDiv);
+            });
         }
 
-        function calculateCost() {
-            const numPlaylists = parseInt(document.getElementById("num-playlist").value);
-            const duration = parseInt(document.getElementById("durata").value);
-
-            let playlistD1 = numPlaylists > 1; 
-            let playlistD2 = numPlaylists > 3; 
-            let playlistD3 = numPlaylists > 6; 
-
-            let monthsD1 = duration > 3;
-            let monthsD2 = duration > 5; // D2 months if >5 months
-
-            let totalCost = 0;
-            let details = '';
-
-            for (let i = 1; i <= numPlaylists; i++) {
-                const campaignType = document.querySelector(`input[name="playlist-${i}"]:checked`).value;
-                // Retrieve the relevant price table based on the playlist number
-                const pTable = priceTable[i];
-
-                let playlistCost = 0;
-                let playlistLabel = `Playlist ${i}:`;
-                if (playlistD3 && i >= 7) {
-                    playlistLabel = `<span class="discount-pink">Playlist ${i}:</span>`;
-                } else if (playlistD2 && i >= 4) {
-                    playlistLabel = `<span class="discount-fuchsia">Playlist ${i}:</span>`;
-                } else if (playlistD1 && i >= 2) {
-                    playlistLabel = `<span class="discount-blue">Playlist ${i}:</span>`;
-                }
-
-                let breakdown = `<div>${playlistLabel}<br>`;
-                const isRenew = (campaignType === 'renew');
-
-                function getMonthLabel(m) {
-                    let monthLabel = `Month ${m}:`;
-                    if (monthsD2) {
-                        // Discount 2 months: all months in orange
-                        if (isRenew) {
-                            // Renew: all months orange
-                            monthLabel = `<span class="discount-orange">Month ${m}:</span>`;
-                        } else {
-                            // New: month 1 not colored, from 2 on orange
-                            if (m === 1) {
-                                monthLabel = `Month ${m}:`;
-                            } else {
-                                monthLabel = `<span class="discount-orange">Month ${m}:</span>`;
-                            }
-                        }
-                    } else if (monthsD1) {
-                        // Discount 1 months: if Renew all yellow, if New only from month 2
-                        if (isRenew) {
-                            monthLabel = `<span class="discount-yellow">Month ${m}:</span>`;
-                        } else {
-                            if (m === 1) {
-                                monthLabel = `Month ${m}:`;
-                            } else {
-                                monthLabel = `<span class="discount-yellow">Month ${m}:</span>`;
-                            }
-                        }
-                    }
-                    return monthLabel;
-                }
-
-                if (campaignType === 'new') {
-                    if (duration === 1) {
-                        playlistCost = pTable.new_campaign;
-                        breakdown += `&nbsp;&nbsp;Month 1: €${pTable.new_campaign}<br>`;
-                    } else {
-                        // First month is "new_campaign"
-                        let month1Label = getMonthLabel(1);
-                        breakdown += `&nbsp;&nbsp;${month1Label} €${pTable.new_campaign}<br>`;
-                        playlistCost += pTable.new_campaign;
-
-                        // Remaining months are "renew_duration_mesi"
-                        const renewKey = `renew_${duration}_mesi`;
-                        const monthlyCost = pTable[renewKey];
-                        for (let m = 2; m <= duration; m++) {
-                            let monthLabel = getMonthLabel(m);
-                            breakdown += `&nbsp;&nbsp;${monthLabel} €${monthlyCost}<br>`;
-                            playlistCost += monthlyCost;
-                        }
-                    }
-                } else {
-                    // Renew
-                    if (duration === 1) {
-                        const monthlyCost = pTable.renew_2_mesi;
-                        breakdown += `&nbsp;&nbsp;Month 1: €${monthlyCost}<br>`;
-                        playlistCost = monthlyCost;
-                    } else {
-                        const renewKey = `renew_${duration}_mesi`;
-                        const monthlyCost = pTable[renewKey];
-                        for (let m = 1; m <= duration; m++) {
-                            let monthLabel = getMonthLabel(m);
-                            breakdown += `&nbsp;&nbsp;${monthLabel} €${monthlyCost}<br>`;
-                            playlistCost += monthlyCost;
-                        }
-                    }
-                }
-
-                breakdown += `&nbsp;&nbsp;Total: €${playlistCost}</div><br>`;
-                details += breakdown;
-                totalCost += playlistCost;
-            }
-
-            let discountSummary = "";
-            const anyPlaylistDiscount = playlistD1 || playlistD2 || playlistD3;
-            const anyMonthsDiscount = monthsD1 || monthsD2;
-
-            if (anyPlaylistDiscount || anyMonthsDiscount) {
-                discountSummary += "Discount Applied:<br>";
-
-                if (playlistD1) {
-                    discountSummary += `<span class="discount-blue">Playlist Discount 1 (More than 1 playlist)</span><br>`;
-                }
-                if (playlistD2) {
-                    discountSummary += `<span class="discount-fuchsia">Playlist Discount 2 (More than 3 playlists)</span><br>`;
-                }
-                if (playlistD3) {
-                    discountSummary += `<span class="discount-pink">Playlist Discount 3 (More than 6 playlists)</span><br>`;
-                }
-                if (monthsD1) {
-                    discountSummary += `<span class="discount-yellow">Months Discount 1 (More than 3 months)</span><br>`;
-                }
-                if (monthsD2) {
-                    discountSummary += `<span class="discount-orange">Months Discount 2 (More than 5 months)</span><br>`;
-                }
+        function toggleTier(checkbox, listId) {
+            const list = document.getElementById(listId);
+            const inputs = list.querySelectorAll('input[type="checkbox"]');
+            
+            if (checkbox.checked) {
+                list.classList.remove('disabled-tier');
+                inputs.forEach(inp => inp.disabled = false);
             } else {
-                discountSummary += "No Discounts Applied.";
+                list.classList.add('disabled-tier');
+                inputs.forEach(inp => inp.disabled = true);
             }
-
-            details += `<div>${discountSummary}</div>`;
-
-            document.getElementById("result").innerText = `Total Cost: €${totalCost}`;
-            document.getElementById("summary-info").innerHTML = details;
         }
 
-        updatePlaylists();
+        // --- 4. EXPORT PDF ---
+        function generatePDF() {
+            const element = document.getElementById('canvas-area');
+            const opt = {
+                margin:       [0, 0, 0, 0],
+                filename:     'playlist-growth-plan.pdf',
+                image:        { type: 'jpeg', quality: 0.98 },
+                html2canvas:  { scale: 2, useCORS: true }, // useCORS aiuta con le immagini esterne
+                jsPDF:        { unit: 'in', format: 'letter', orientation: 'landscape' }
+            };
+
+            // Nascondi input placeholder per estetica
+            document.getElementById('spotifyUrl').style.display = 'none';
+
+            html2pdf().set(opt).from(element).save().then(() => {
+                // Ripristina input
+                document.getElementById('spotifyUrl').style.display = 'block';
+            });
+        }
+
+        // Inizializza
+        window.onload = function() {
+            // Set data odierna come default
+            const today = new Date().toISOString().split('T')[0];
+            document.getElementById('startDate').value = today;
+            
+            calculateDates();
+            renderTiers();
+        };
+
     </script>
 </body>
 </html>
