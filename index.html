@@ -23,33 +23,32 @@
             background-color: #000;
             color: var(--text-main);
             font-family: 'Inter', sans-serif;
-            /* Padding per visualizzazione schermo */
-            padding: 40px 0; 
+            padding: 40px 0;
             display: flex;
             flex-direction: column;
-            align-items: center; 
-            /* Importante: durante l'uso normale è centrato, in export sarà a sinistra */
+            align-items: center;
+            justify-content: flex-start;
+            box-sizing: border-box;
         }
 
         /* --- API CONFIG --- */
         .api-config {
             position: fixed; top: 0; left: 0; width: 100%; z-index: 9999;
             background: #222; padding: 5px; 
-            text-align: center;
-            border-bottom: 1px solid #444; font-size: 0.8rem;
+            text-align: center; border-bottom: 1px solid #444; font-size: 0.8rem;
         }
         .api-config input { background: #333; border: 1px solid #555; color: white; padding: 4px; }
 
-        /* --- CONTAINER PRINCIPALE EXPORT --- */
+        /* --- EXPORT WRAPPER --- */
         #export-content {
             display: flex;
             flex-direction: column;
             align-items: center;
-            width: 100%;
+            width: fit-content; /* Si adatta al contenuto, critico per export */
         }
 
-        /* --- PDF PAGE (PIXEL PERFECT A4) --- */
-        /* 1123px x 794px = A4 Landscape esatto per jsPDF */
+        /* --- PDF PAGE (Dimensioni FISSE in Pixel per evitare tagli) --- */
+        /* 1123px larghezza x 794px altezza = A4 Landscape Esatto */
         .pdf-page {
             background: url('Fabhertz_aesthetic_background_wallpaper_for_a_website_landing_p_bbf86bfd-9b57-4afc-b01e-4da55c2315f3.jpeg') no-repeat center center;
             background-size: cover;
@@ -57,8 +56,8 @@
             width: 1123px;
             height: 794px;
             
-            /* Padding ottimizzato */
-            padding: 0px 50px 20px 50px; 
+            /* Padding ridotto al minimo e contenuto alzato */
+            padding: 5px 50px 20px 50px; 
             
             box-sizing: border-box;
             display: flex;
@@ -68,8 +67,7 @@
             box-shadow: 0 0 50px rgba(0,0,0,0.8);
             overflow: hidden;
             
-            /* Margine inferiore per staccare le pagine A SCHERMO */
-            margin-bottom: 50px; 
+            margin-bottom: 50px; /* Spazio a schermo */
         }
 
         /* --- HEADER --- */
@@ -77,16 +75,16 @@
             display: flex;
             align-items: center;
             justify-content: space-between;
-            margin-bottom: 5px; 
-            margin-top: 5px; 
+            margin-bottom: 0px; 
+            margin-top: 0px; 
             background: transparent; 
             padding: 0;
-            height: 220px; 
+            height: 180px; /* Altezza ridotta per alzare tutto */
             flex-shrink: 0;
         }
 
         header img {
-            max-height: 220px;
+            max-height: 180px;
             width: auto;
             object-fit: contain;
         }
@@ -97,7 +95,7 @@
             flex-direction: column;
             align-items: flex-end;
             justify-content: center;
-            padding-top: 15px;
+            padding-top: 10px;
         }
 
         .header-titles h1 {
@@ -109,7 +107,7 @@
             text-shadow: 0 2px 5px rgba(0,0,0,0.5);
         }
 
-        /* STILE NOME ARTISTA (TEXT DISPLAY - Per Export) */
+        /* NOME ARTISTA (TEXT - Export) */
         .artist-name-display {
             font-size: 2.5rem;
             font-weight: 700;
@@ -117,12 +115,12 @@
             text-shadow: 0 2px 5px rgba(0,0,0,0.5);
             border-bottom: 3px solid var(--accent-purple);
             padding-bottom: 2px;
-            display: none; /* Nascosto di default */
+            display: none; 
             min-width: 300px;
             color: white;
         }
 
-        /* STILE NOME ARTISTA (INPUT - Per Editing) */
+        /* NOME ARTISTA (INPUT - Editing) */
         .artist-input {
             background: transparent;
             border: none;
@@ -143,7 +141,7 @@
             display: grid;
             grid-template-columns: 300px 1fr 1fr;
             gap: 20px;
-            height: 560px; 
+            height: 570px; /* Massimizzato altezza per vedere tutto */
             overflow: hidden;
             flex-shrink: 0;
         }
@@ -186,16 +184,10 @@
 
         label { display: block; margin-top: 5px; font-size: 0.8rem; color: #aaa; }
         
-        input[type="text"], input[type="number"], input[type="date"], select, input[type="password"] {
-            width: 100%; padding: 8px; margin-top: 4px;
-            background: #2a2a2a; border: 1px solid #444;
-            border-radius: 4px; color: white; font-size: 0.9rem;
-            box-sizing: border-box;
-        }
-
+        input, select { width: 100%; padding: 8px; margin-top: 4px; background: #2a2a2a; border: 1px solid #444; border-radius: 4px; color: white; font-size: 0.9rem; box-sizing: border-box; }
         input[type="checkbox"] { width: auto !important; margin-right: 8px; transform: scale(1.2); cursor: pointer; }
 
-        /* --- LEFT/CENTER/RIGHT STYLES --- */
+        /* --- SCHEDULE --- */
         #left-edit-mode, #left-view-mode { flex-grow: 1; overflow-y: auto; }
         .schedule-row { background: #252525; border: 1px solid #333; border-radius: 4px; padding: 8px; margin-bottom: 5px; }
         .schedule-header { display: flex; justify-content: space-between; font-size: 0.9rem; color: white; font-weight: 600; margin-bottom: 2px; }
@@ -205,6 +197,7 @@
         .locked-date { font-size: 0.85rem; color: #ccc; }
         .locked-cost { font-size: 1.1rem; font-weight: 700; color: white; }
 
+        /* --- SPOTIFY --- */
         .center-content { display: flex; flex-direction: column; align-items: center; justify-content: center; height: 100%; flex-grow: 1; }
         .artwork-container { width: 250px; height: 250px; box-shadow: 0 15px 40px rgba(0,0,0,0.6); margin-bottom: 15px; border-radius: 8px; overflow: hidden; background: #000; flex-shrink: 0; }
         .artwork-container img { width: 100%; height: 100%; object-fit: cover; }
@@ -212,6 +205,7 @@
         .playlist-owner { font-size: 0.9rem; color: #999; margin-bottom: 10px; text-align: center;}
         .playlist-followers { background: rgba(255,255,255,0.1); border: 1px solid rgba(255,255,255,0.2); padding: 6px 14px; border-radius: 20px; color: #fff; font-size: 0.9rem; font-weight: 700; text-transform: uppercase; letter-spacing: 1px; }
 
+        /* --- TIERS --- */
         #right-edit-mode { overflow-y: auto; height: 90%; padding-right: 5px; }
         #right-view-mode { overflow-y: auto; height: 90%; }
         .tier-group { margin-bottom: 15px; border: 1px solid #444; border-radius: 6px; overflow: hidden; background: #1a1a1a; }
@@ -235,20 +229,17 @@
         body.export-mode {
             padding: 0 !important;
             margin: 0 !important;
-            align-items: flex-start !important; /* Forza a sinistra */
+            align-items: flex-start !important; /* Allinea tutto a sinistra per evitare margini */
+            justify-content: flex-start !important;
             background-color: transparent;
-            overflow: hidden;
-        }
-        body.export-mode #export-content {
-            width: 1123px; /* Larghezza fissa */
+            width: 1123px; /* Larghezza forzata al pixel */
         }
         body.export-mode .pdf-page {
-            margin-bottom: 0 !important; /* Rimuove gap verticale tra pagine */
+            margin-bottom: 0 !important; /* Rimuove gap verticale */
             box-shadow: none;
-            margin-left: 0;
-            margin-right: 0;
+            border: none;
         }
-        /* Scambio Input/Text in Pagina 1 */
+        /* Nasconde l'input e mostra il testo in Pagina 1 */
         body.export-mode #artistInput { display: none; }
         body.export-mode #artistDisplay { display: inline-block; }
 
@@ -534,12 +525,12 @@
             }
         }
 
-        // --- EXPORT PDF FIX ---
+        // --- EXPORT PDF FIX PIXEL PERFECT ---
         function exportToPDF() {
             const toHide = document.querySelectorAll('.hide-on-export');
             toHide.forEach(el => el.classList.add('hidden'));
 
-            // Attiva modalità export (rimuove padding/margin body)
+            // Forza modalità export: allineamento a sinistra, 0 padding
             document.body.classList.add('export-mode');
 
             // Sync Artist Name
@@ -558,9 +549,14 @@
                     scale: 2, 
                     useCORS: true, 
                     scrollX: 0, scrollY: 0,
-                    windowWidth: 1123 // Forza larghezza esatta
+                    // NON USARE windowWidth qui, lascia che prenda la dimensione dell'elemento
                 },
-                jsPDF:        { unit: 'px', format: [1123, 794], orientation: 'landscape' }
+                jsPDF: { 
+                    unit: 'px', 
+                    format: [1123, 794], // FORMATO ESATTO IN PIXEL
+                    orientation: 'landscape', 
+                    hotfixes: ["px_scaling"] 
+                }
             };
 
             html2pdf().set(opt).from(element).save().then(() => {
