@@ -1,532 +1,304 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Soundvertise - Playlist Growth Plan</title>
-    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/html2pdf.js/0.10.1/html2pdf.bundle.min.js"></script>
-    <script src="secrets.js" onerror="console.log('Nessun file secrets.js trovato')"></script>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Soundvertise - Playlist Growth Plan</title>
 
-    <style>
-        :root {
-            --glass-bg: rgba(20, 20, 20, 0.92);
-            --accent-purple: #9575cd;
-            --text-main: #ffffff;
-            --border-radius: 8px;
-        }
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+<script src="https://cdnjs.cloudflare.com/ajax/libs/html2pdf.js/0.10.1/html2pdf.bundle.min.js"></script>
+<script src="secrets.js" onerror="console.log('Nessun file secrets.js trovato')"></script>
 
-        body {
-            background-color: #000;
-            color: var(--text-main);
-            font-family: 'Inter', sans-serif;
-            margin: 0;
-            /* Padding del body per la visualizzazione a schermo. 
-               Non influisce sull'export grazie al fix JS. */
-            padding: 20px;
-            display: flex;
-            flex-direction: column;
-            align-items: center;
-            justify-content: center;
-            min-height: 100vh;
-        }
+<style>
+:root {
+    --glass-bg: rgba(20,20,20,0.92);
+    --accent-purple: #9575cd;
+    --text-main: #ffffff;
+    --border-radius: 8px;
+}
 
-        /* --- API CONFIG --- */
-        .api-config {
-            background: #222; padding: 8px; margin-bottom: 20px;
-            border-radius: 6px; font-size: 0.8rem; display: flex; gap: 10px;
-        }
-        .api-config input { background: #333; border: 1px solid #555; color: white; padding: 4px; }
+/* ================= BODY ================= */
+body {
+    background: #000;
+    color: var(--text-main);
+    font-family: 'Inter', sans-serif;
+    margin: 0;
+    padding: 20px;
+    display: flex;
+    justify-content: center;
+}
 
-        /* --- CANVAS AREA (Pixel Perfect A4 Landscape) --- */
-        /* 1123px x 794px è la risoluzione standard per A4 orizzontale a 96 DPI */
-        #canvas-area {
-            background: url('Fabhertz_aesthetic_background_wallpaper_for_a_website_landing_p_bbf86bfd-9b57-4afc-b01e-4da55c2315f3.jpeg') no-repeat center center;
-            background-size: cover;
-            width: 1123px;
-            height: 794px;
-            /* Ridotto padding interno per fare spazio al logo grande */
-            padding: 25px; 
-            box-sizing: border-box;
-            display: flex;
-            flex-direction: column;
-            position: relative;
-            box-shadow: 0 0 50px rgba(0,0,0,0.8);
-            overflow: hidden; 
-        }
+/* ================= API BAR ================= */
+.api-config {
+    background: #222;
+    padding: 8px;
+    margin-bottom: 20px;
+    border-radius: 6px;
+    font-size: 0.8rem;
+    display: flex;
+    gap: 10px;
+}
+.api-config input {
+    background: #333;
+    border: 1px solid #555;
+    color: white;
+    padding: 4px;
+}
 
-        /* --- HEADER --- */
-        header {
-            display: flex;
-            align-items: center;
-            justify-content: space-between;
-            /* Ridotto margine inferiore */
-            margin-bottom: 15px;
-            background: rgba(0,0,0,0.6);
-            padding: 10px 25px;
-            border-radius: 12px;
-            /* Aumentata altezza per contenere il logo gigante */
-            height: 280px; 
-        }
+/* ================= CANVAS ================= */
+#canvas-area {
+    width: 1123px;
+    height: 794px;
+    background: url('Fabhertz_aesthetic_background_wallpaper_for_a_website_landing_p_bbf86bfd-9b57-4afc-b01e-4da55c2315f3.jpeg') no-repeat center;
+    background-size: cover;
+    padding: 25px;
+    box-sizing: border-box;
+    display: flex;
+    flex-direction: column;
+    overflow: hidden;
+}
 
-        header img {
-            /* RADDOPPIATO: da 130px a 260px */
-            max-height: 260px;
-            width: auto;
-            object-fit: contain;
-        }
+/* ================= HEADER ================= */
+header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    height: 280px;
+    margin-bottom: 15px;
 
-        .header-titles {
-            text-align: right;
-            display: flex;
-            flex-direction: column;
-            align-items: flex-end;
-            justify-content: center;
-        }
+    /* ✅ BACKGROUND NERO RIMOSSO */
+    background: transparent;
+    padding: 0;
+}
 
-        .header-titles h1 {
-            font-size: 1.1rem;
-            margin: 0 0 10px 0;
-            text-transform: uppercase;
-            letter-spacing: 3px;
-            opacity: 0.9;
-        }
+header img {
+    max-height: 260px;
+    object-fit: contain;
+}
 
-        .artist-input {
-            background: transparent;
-            border: none;
-            border-bottom: 3px solid var(--accent-purple);
-            color: white;
-            font-size: 2.5rem;
-            font-weight: 700;
-            text-align: right;
-            width: 500px;
-            padding: 5px 0;
-        }
-        .artist-input:focus { outline: none; border-bottom-color: #fff; }
+.header-titles {
+    text-align: right;
+}
 
-        /* --- MAIN GRID --- */
-        .main-container {
-            display: grid;
-            grid-template-columns: 300px 1fr 1fr;
-            /* Ridotto gap tra le colonne */
-            gap: 15px;
-            height: 100%;
-            overflow: hidden;
-        }
+.header-titles h1 {
+    font-size: 1.1rem;
+    letter-spacing: 3px;
+    text-transform: uppercase;
+    margin-bottom: 10px;
+    opacity: .9;
+}
 
-        .col {
-            background: var(--glass-bg);
-            border-radius: var(--border-radius);
-            padding: 20px;
-            display: flex;
-            flex-direction: column;
-            border: 1px solid rgba(255,255,255,0.1);
-            height: 100%;
-            overflow: hidden;
-            box-sizing: border-box;
-        }
+.artist-input {
+    background: transparent;
+    border: none;
+    border-bottom: 3px solid var(--accent-purple);
+    color: white;
+    font-size: 2.5rem;
+    font-weight: 700;
+    text-align: right;
+    width: 500px;
+}
+.artist-input:focus {
+    outline: none;
+}
 
-        h2 {
-            font-size: 1.1rem;
-            text-transform: uppercase;
-            border-bottom: 1px solid #444;
-            padding-bottom: 10px;
-            margin: 0 0 15px 0;
-            color: var(--accent-purple);
-            letter-spacing: 1px;
-            flex-shrink: 0;
-        }
+/* ================= GRID ================= */
+.main-container {
+    display: grid;
+    grid-template-columns: 300px 1fr 1fr;
+    gap: 15px;
+    height: 100%;
+}
 
-        /* --- BUTTONS --- */
-        .action-btn {
-            background: #333; color: white; border: 1px solid #555;
-            padding: 10px; border-radius: 6px; cursor: pointer;
-            width: 100%; margin-top: auto;
-            font-size: 0.9rem; font-weight: 600;
-            flex-shrink: 0;
-        }
-        .action-btn:hover { background: var(--accent-purple); border-color: var(--accent-purple); }
-        .action-btn.locked { background: #222; color: #888; border: 1px solid #333; }
+.col {
+    background: var(--glass-bg);
+    padding: 20px;
+    border-radius: var(--border-radius);
+    display: flex;
+    flex-direction: column;
+    overflow: hidden;
+}
 
-        /* --- INPUTS --- */
-        label { display: block; margin-top: 5px; font-size: 0.8rem; color: #aaa; }
-        
-        input[type="text"], input[type="number"], input[type="date"], select, input[type="password"] {
-            width: 100%; padding: 8px; margin-top: 4px;
-            background: #2a2a2a; border: 1px solid #444;
-            border-radius: 4px; color: white; font-size: 0.9rem;
-            box-sizing: border-box;
-        }
+h2 {
+    font-size: 1.1rem;
+    text-transform: uppercase;
+    border-bottom: 1px solid #444;
+    padding-bottom: 10px;
+    margin-bottom: 15px;
+    color: var(--accent-purple);
+}
 
-        /* CHECKBOXES FIX */
-        input[type="checkbox"] {
-            width: auto !important; margin-right: 8px;
-            transform: scale(1.2); cursor: pointer;
-        }
+/* ================= BUTTONS ================= */
+.action-btn {
+    background: #333;
+    border: 1px solid #555;
+    color: white;
+    padding: 10px;
+    margin-top: auto;
+    border-radius: 6px;
+    cursor: pointer;
+}
+.action-btn:hover {
+    background: var(--accent-purple);
+    border-color: var(--accent-purple);
+}
 
-        /* --- LEFT COL: Schedule --- */
-        #left-edit-mode, #left-view-mode { flex-grow: 1; overflow-y: auto; }
-        
-        .schedule-row {
-            background: #252525; border: 1px solid #333; border-radius: 4px;
-            padding: 10px; margin-bottom: 8px;
-        }
-        .schedule-header {
-            display: flex; justify-content: space-between;
-            font-size: 0.9rem; color: white; font-weight: 600; margin-bottom: 4px;
-        }
-        .schedule-dates { font-size: 0.8rem; color: #aaa; }
-        
-        .locked-schedule-item {
-            display: flex; justify-content: space-between; align-items: center;
-            padding: 12px 0; border-bottom: 1px solid #333;
-        }
-        .locked-month { font-weight: 600; color: var(--accent-purple); font-size: 1.1rem; }
-        .locked-date { font-size: 0.85rem; color: #ccc; }
-        .locked-cost { font-size: 1.2rem; font-weight: 700; color: white; }
+/* ================= SCHEDULE ================= */
+.schedule-row {
+    background: #252525;
+    border: 1px solid #333;
+    padding: 10px;
+    margin-bottom: 8px;
+    border-radius: 4px;
+}
 
-        /* --- CENTER COL: Spotify --- */
-        .center-content {
-            display: flex; flex-direction: column; align-items: center; 
-            justify-content: center; height: 100%; flex-grow: 1;
-        }
-        .artwork-container {
-            width: 230px; height: 230px; /* Ridotto leggermente per spazio */
-            box-shadow: 0 15px 40px rgba(0,0,0,0.6);
-            margin-bottom: 20px; border-radius: 8px;
-            overflow: hidden; background: #000;
-        }
-        .artwork-container img { width: 100%; height: 100%; object-fit: cover; }
-        .playlist-title { font-size: 1.4rem; font-weight: 700; margin: 5px 0; line-height: 1.2; text-align: center;}
-        .playlist-owner { font-size: 1rem; color: #999; margin-bottom: 15px; text-align: center;}
-        .playlist-followers {
-            background: rgba(255,255,255,0.1); border: 1px solid rgba(255,255,255,0.2);
-            padding: 8px 16px; border-radius: 20px;
-            color: #fff; font-size: 1rem; font-weight: 700;
-            text-transform: uppercase; letter-spacing: 1px;
-        }
+.total-display {
+    margin-top: 15px;
+    text-align: right;
+    font-size: 1.4rem;
+    font-weight: bold;
+    color: var(--accent-purple);
+}
 
-        /* --- RIGHT COL: Tiers --- */
-        #right-edit-mode { overflow-y: auto; height: 90%; padding-right: 5px; }
-        #right-view-mode { overflow-y: auto; height: 90%; }
+/* ================= SPOTIFY ================= */
+.center-content {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+}
 
-        .tier-group { margin-bottom: 15px; border: 1px solid #444; border-radius: 6px; overflow: hidden; background: #1a1a1a; }
-        .tier-header { 
-            background: #333; padding: 8px 12px; 
-            display: flex; justify-content: space-between; align-items: center;
-        }
-        .tier-title { font-weight: bold; font-size: 0.95rem; color: #fff; text-transform: uppercase;}
-        
-        .tier-countries { 
-            padding: 10px; display: grid; grid-template-columns: 1fr 1fr; gap: 8px; 
-        } 
-        .country-label { 
-            font-size: 0.85rem; display: flex; align-items: center; 
-            color: #eee; margin-top: 0; cursor: pointer;
-        }
-        
-        /* LOCKED VIEW */
-        .locked-tier-block { margin-bottom: 25px; }
-        .locked-tier-title { 
-            color: var(--accent-purple); font-weight: 700; font-size: 1.1rem; 
-            text-transform: uppercase; margin-bottom: 6px; border-bottom: 1px solid #444; padding-bottom: 4px;
-        }
-        .locked-country-list { 
-            font-size: 0.95rem; line-height: 1.5; color: #eee; 
-        }
+.artwork-container {
+    width: 230px;
+    height: 230px;
+    overflow: hidden;
+    border-radius: 8px;
+    margin-bottom: 15px;
+}
+.artwork-container img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+}
 
-        /* --- EXPORT BUTTON --- */
-        .export-container { position: fixed; bottom: 30px; right: 30px; z-index: 2000; }
-        .export-btn {
-            background-color: var(--accent-purple); color: white; border: none;
-            padding: 15px 40px; font-size: 1.1rem; font-weight: bold;
-            border-radius: 50px; cursor: pointer;
-            box-shadow: 0 5px 20px rgba(0,0,0,0.5);
-            transition: transform 0.2s;
-        }
-        .export-btn:hover { transform: scale(1.05); background-color: #7e57c2; }
+.playlist-title {
+    font-size: 1.4rem;
+    font-weight: bold;
+    text-align: center;
+}
+.playlist-owner {
+    color: #aaa;
+}
+.playlist-followers {
+    margin-top: 10px;
+    padding: 8px 16px;
+    border-radius: 20px;
+    background: rgba(255,255,255,0.12);
+    font-weight: bold;
+}
 
-        .hidden { display: none !important; }
-        .total-display {
-            margin-top: 15px; padding-top: 10px; border-top: 1px solid #555;
-            font-size: 1.4rem; font-weight: bold; text-align: right; color: var(--accent-purple);
-        }
+/* ================= EXPORT ================= */
+.export-container {
+    position: fixed;
+    bottom: 30px;
+    right: 30px;
+    z-index: 999;
+}
 
-    </style>
+.export-btn {
+    background: var(--accent-purple);
+    color: white;
+    border: none;
+    padding: 15px 40px;
+    font-size: 1.1rem;
+    border-radius: 50px;
+    cursor: pointer;
+}
+
+/* ================= UTILS ================= */
+.hidden { display: none !important; }
+
+@media print {
+    body {
+        margin: 0;
+        padding: 0;
+    }
+}
+</style>
 </head>
+
 <body>
 
-    <div id="apiBar" class="api-config hide-on-export">
-        <span style="color:#aaa;">Spotify API (Manuale):</span>
-        <input type="text" id="clientId" placeholder="Client ID">
-        <input type="password" id="clientSecret" placeholder="Client Secret">
+<div id="canvas-area">
+
+<header>
+    <img src="LOGO WHITE NO BACKGROUND .png">
+    <div class="header-titles">
+        <h1>Playlist Growth Plan</h1>
+        <input class="artist-input" value="ARTIST NAME">
+    </div>
+</header>
+
+<div class="main-container">
+    <div class="col">
+        <h2>Campaign Timeline</h2>
+        <div id="scheduleContainer"></div>
+        <div class="total-display" id="totalDisplay">Total: €0.00</div>
     </div>
 
-    <div id="canvas-area">
-        <header>
-            <img src="LOGO WHITE NO BACKGROUND .png" alt="Soundvertise" onerror="this.style.display='none'">
-            <div class="header-titles">
-                <h1>Playlist Growth Plan</h1>
-                <input type="text" class="artist-input" placeholder="ARTIST NAME" value="ARTIST NAME">
+    <div class="col">
+        <h2>Playlist Preview</h2>
+        <div class="center-content">
+            <div class="artwork-container">
+                <img src="https://via.placeholder.com/300">
             </div>
-        </header>
-
-        <div class="main-container">
-            
-            <div class="col">
-                <h2>Campaign Timeline</h2>
-                
-                <div id="left-edit-mode">
-                    <label>Duration</label>
-                    <select id="months" onchange="generateSchedule()">
-                        <option value="1">1 Month</option>
-                        <option value="2">2 Months</option>
-                        <option value="3">3 Months</option>
-                        <option value="4">4 Months</option>
-                        <option value="5">5 Months</option>
-                        <option value="6">6 Months</option>
-                    </select>
-                    <label>Start Date</label>
-                    <input type="date" id="startDate" onchange="generateSchedule()">
-                    <div id="scheduleContainer" style="margin-top:15px;"></div>
-                </div>
-
-                <div id="left-view-mode" class="hidden">
-                    <div id="locked-schedule-list"></div>
-                </div>
-
-                <div class="total-display" id="totalDisplay">Total: €0.00</div>
-                <button class="action-btn hide-on-export" id="btn-lock-left" onclick="toggleLeft()">Confirm & Lock</button>
-            </div>
-
-            <div class="col">
-                <h2>Playlist Preview</h2>
-                <div class="center-content">
-                    <div id="center-edit-mode" class="hide-on-export" style="width:100%; margin-bottom:20px; text-align:center;">
-                        <input type="text" id="spotifyUrl" placeholder="Paste Spotify URL..." style="margin-bottom:8px;">
-                        <button onclick="fetchSpotifyData()" class="action-btn" style="width:auto; padding: 5px 20px;">Load Data</button>
-                    </div>
-
-                    <div class="artwork-container">
-                        <img id="plArtwork" src="https://via.placeholder.com/300/111/333?text=No+Data" alt="Cover">
-                    </div>
-                    <div class="playlist-title" id="plTitle">Playlist Title</div>
-                    <div class="playlist-owner" id="plOwner">Artist Name</div>
-                    <div class="playlist-followers" id="plFollowers">0 Followers</div>
-                </div>
-            </div>
-
-            <div class="col">
-                <h2>Target Countries</h2>
-                
-                <div id="right-edit-mode">
-                    <div id="tiersContainer"></div>
-                </div>
-
-                <div id="right-view-mode" class="hidden">
-                    <div id="locked-tiers-list"></div>
-                </div>
-                <button class="action-btn hide-on-export" id="btn-lock-right" onclick="toggleRight()">Confirm & Lock</button>
-            </div>
+            <div class="playlist-title">Playlist Title</div>
+            <div class="playlist-owner">by Artist</div>
+            <div class="playlist-followers">0 FOLLOWERS</div>
         </div>
     </div>
 
-    <div class="export-container hide-on-export">
-        <button class="export-btn" onclick="exportToPDF()">Export PDF</button>
+    <div class="col">
+        <h2>Target Countries</h2>
+        <div>Tier view locked</div>
     </div>
+</div>
 
-    <script>
-        // --- GESTIONE API KEY ---
-        let hasExternalKeys = (typeof API_CONFIG !== 'undefined');
-        if(hasExternalKeys) document.getElementById('apiBar').style.display = 'none';
+</div>
 
-        // --- 1. LOGICA DATE E COSTI ---
-        let leftLocked = false;
-        
-        function generateSchedule() {
-            const months = parseInt(document.getElementById('months').value);
-            const startDateInput = document.getElementById('startDate').value;
-            const container = document.getElementById('scheduleContainer');
-            const oldInputs = document.querySelectorAll('.monthly-cost');
-            const oldValues = Array.from(oldInputs).map(i => i.value);
+<div class="export-container">
+    <button class="export-btn" onclick="exportToPDF()">Export PDF</button>
+</div>
 
-            container.innerHTML = '';
+<script>
+function exportToPDF() {
+    const element = document.getElementById('canvas-area');
 
-            if (!startDateInput) return;
+    const original = {
+        margin: document.body.style.margin,
+        padding: document.body.style.padding,
+        overflow: document.body.style.overflow
+    };
 
-            let currentDate = new Date(startDateInput);
+    document.body.style.margin = '0';
+    document.body.style.padding = '0';
+    document.body.style.overflow = 'hidden';
 
-            for (let i = 1; i <= months; i++) {
-                let startStr = currentDate.toLocaleDateString('en-GB');
-                let endDate = new Date(currentDate);
-                endDate.setDate(currentDate.getDate() + 27);
-                let endStr = endDate.toLocaleDateString('en-GB');
-                const val = oldValues[i-1] || '';
+    const w = element.offsetWidth;
+    const h = element.offsetHeight;
 
-                const row = document.createElement('div');
-                row.className = 'schedule-row';
-                row.innerHTML = `
-                    <div class="schedule-header">
-                        Month ${i}
-                        <input type="hidden" class="hidden-date-range" value="${startStr} - ${endStr}">
-                    </div>
-                    <div class="schedule-dates">${startStr} - ${endStr}</div>
-                    <input type="number" class="monthly-cost" value="${val}" placeholder="Cost €" oninput="calculateTotal()" style="text-align:right;">
-                `;
-                container.appendChild(row);
-                currentDate.setDate(currentDate.getDate() + 28);
-            }
-            calculateTotal();
-        }
+    html2pdf().set({
+        margin: 0,
+        filename: 'Playlist_Growth_Plan.pdf',
+        image: { type: 'jpeg', quality: 1 },
+        html2canvas: { scale: 2, useCORS: true, backgroundColor: null },
+        jsPDF: { unit: 'px', format: [w, h], orientation: 'landscape', hotfixes: ['px_scaling'] },
+        pagebreak: { mode: [] }
+    }).from(element).save().then(() => {
+        Object.assign(document.body.style, original);
+    });
+}
+</script>
 
-        function calculateTotal() {
-            const inputs = document.querySelectorAll('.monthly-cost');
-            let total = 0;
-            inputs.forEach(inp => total += (parseFloat(inp.value) || 0));
-            document.getElementById('totalDisplay').innerText = `Total: €${total.toLocaleString('en-US', {minimumFractionDigits: 2})}`;
-        }
-
-        function toggleLeft() {
-            const editMode = document.getElementById('left-edit-mode');
-            const viewMode = document.getElementById('left-view-mode');
-            const btn = document.getElementById('btn-lock-left');
-            const list = document.getElementById('locked-schedule-list');
-
-            if (!leftLocked) {
-                list.innerHTML = '';
-                const rows = document.querySelectorAll('.schedule-row');
-                rows.forEach((row, index) => {
-                    const dates = row.querySelector('.hidden-date-range').value;
-                    const costVal = row.querySelector('.monthly-cost').value;
-                    const cost = costVal ? `€${parseFloat(costVal).toLocaleString()}` : '€0';
-                    list.innerHTML += `<div class="locked-schedule-item"><div><div class="locked-month">Month ${index + 1}</div><span class="locked-date">${dates}</span></div><div class="locked-cost">${cost}</div></div>`;
-                });
-                editMode.classList.add('hidden'); viewMode.classList.remove('hidden'); btn.innerText = "Edit Plan"; btn.classList.add('locked'); leftLocked = true;
-            } else {
-                editMode.classList.remove('hidden'); viewMode.classList.add('hidden'); btn.innerText = "Confirm & Lock"; btn.classList.remove('locked'); leftLocked = false;
-            }
-        }
-
-        // --- 2. SPOTIFY API ---
-        async function getAccessToken() {
-            let cid, csec;
-            if (hasExternalKeys) { cid = API_CONFIG.clientId; csec = API_CONFIG.clientSecret; }
-            else { cid = document.getElementById('clientId').value; csec = document.getElementById('clientSecret').value; }
-            if(!cid || !csec) { alert("API Keys Missing"); return null; }
-            try {
-                const result = await fetch('https://accounts.spotify.com/api/token', {
-                    method: 'POST',
-                    headers: { 'Content-Type': 'application/x-www-form-urlencoded', 'Authorization': 'Basic ' + btoa(cid + ':' + csec) },
-                    body: 'grant_type=client_credentials'
-                });
-                const data = await result.json();
-                return data.access_token;
-            } catch(e) { return null; }
-        }
-
-        async function fetchSpotifyData() {
-            const url = document.getElementById('spotifyUrl').value;
-            const match = url.match(/playlist\/([a-zA-Z0-9]+)/);
-            if (!match) return alert("Invalid URL");
-            const token = await getAccessToken();
-            if (!token) return;
-            try {
-                const result = await fetch(`https://api.spotify.com/v1/playlists/${match[1]}`, {
-                    headers: { 'Authorization': 'Bearer ' + token }
-                });
-                const data = await result.json();
-                document.getElementById('plTitle').innerText = data.name;
-                document.getElementById('plOwner').innerText = `by ${data.owner.display_name}`;
-                document.getElementById('plFollowers').innerText = `${data.followers.total.toLocaleString()} FOLLOWERS`;
-                if (data.images.length > 0) document.getElementById('plArtwork').src = data.images[0].url;
-            } catch (e) { alert("Error fetching data"); }
-        }
-
-        // --- 3. GESTIONE PAESI ---
-        let rightLocked = false;
-        const tiersData = [
-            { title: "Tier 1", countries: ["Netherlands", "Australia", "Austria", "Belgium", "Canada", "Switzerland", "Germany", "Denmark", "Spain", "Finland", "France", "United Kingdom", "Ireland", "Italy", "Japan", "Norway", "New Zealand", "Sweden", "United States", "Iceland"] },
-            { title: "Tier 2", countries: ["Argentina", "Brazil", "Mexico", "Colombia", "Turkey", "Chile", "South Africa", "Croatia", "Hungary", "Czech Republic", "Estonia", "Greece", "Hong Kong", "Luxembourg", "Latvia", "Malta", "Peru", "Poland", "Portugal", "Uruguay", "Slovenia", "Slovakia"] },
-            { title: "Tier 3", countries: ["Indonesia", "Philippines", "Thailand", "Malaysia", "Nigeria", "Kenya"] }
-        ];
-
-        function renderTiersInput() {
-            const container = document.getElementById('tiersContainer');
-            tiersData.forEach((tier, index) => {
-                container.innerHTML += `
-                    <div class="tier-group">
-                        <div class="tier-header">
-                            <span class="tier-title">${tier.title}</span>
-                            <input type="checkbox" checked onchange="toggleTierGroup(this, 'tlist-${index}')">
-                        </div>
-                        <div class="tier-countries" id="tlist-${index}">
-                            ${tier.countries.map(c => `<label class="country-label"><input type="checkbox" value="${c}" checked> ${c}</label>`).join('')}
-                        </div>
-                    </div>
-                `;
-            });
-        }
-
-        function toggleTierGroup(cb, id) {
-            const inputs = document.getElementById(id).querySelectorAll('input');
-            inputs.forEach(i => i.disabled = !cb.checked);
-            document.getElementById(id).style.opacity = cb.checked ? '1' : '0.3';
-        }
-
-        function toggleRight() {
-            const editMode = document.getElementById('right-edit-mode');
-            const viewMode = document.getElementById('right-view-mode');
-            const btn = document.getElementById('btn-lock-right');
-            const list = document.getElementById('locked-tiers-list');
-
-            if (!rightLocked) {
-                list.innerHTML = '';
-                tiersData.forEach((tier, index) => {
-                    const groupInputs = document.querySelectorAll(`#tlist-${index} input:checked:not(:disabled)`);
-                    if (groupInputs.length > 0) {
-                        const countriesText = Array.from(groupInputs).map(i => i.value).join(', ');
-                        list.innerHTML += `<div class="locked-tier-block"><div class="locked-tier-title">${tier.title}</div><div class="locked-country-list">${countriesText}.</div></div>`;
-                    }
-                });
-                editMode.classList.add('hidden'); viewMode.classList.remove('hidden'); btn.innerText = "Edit Countries"; btn.classList.add('locked'); rightLocked = true;
-            } else {
-                editMode.classList.remove('hidden'); viewMode.classList.add('hidden'); btn.innerText = "Confirm & Lock"; btn.classList.remove('locked'); rightLocked = false;
-            }
-        }
-
-        // --- 4. EXPORT PDF FIX MARGINI ---
-        function exportToPDF() {
-            const toHide = document.querySelectorAll('.hide-on-export');
-            toHide.forEach(el => el.classList.add('hidden'));
-            const element = document.getElementById('canvas-area');
-            
-            const opt = {
-                margin:       0, // ZERO MARGINI
-                filename:     'Playlist_Growth_Plan.pdf',
-                image:        { type: 'jpeg', quality: 1 },
-                html2canvas:  { 
-                    scale: 2, 
-                    useCORS: true, 
-                    scrollX: 0, scrollY: 0,
-                    // FORZA LA CATTURA ALLA DIMENSIONE ESATTA DELL'ELEMENTO
-                    windowWidth: 1123, windowHeight: 794 
-                },
-                // FORZA IL PDF ALLA DIMENSIONE ESATTA IN PIXEL
-                jsPDF: { unit: 'px', format: [1123, 794], orientation: 'landscape', hotfixes: ["px_scaling"] }
-            };
-
-            html2pdf().set(opt).from(element).save().then(() => {
-                toHide.forEach(el => el.classList.remove('hidden'));
-            });
-        }
-
-        window.onload = function() {
-            const today = new Date().toISOString().split('T')[0];
-            document.getElementById('startDate').value = today;
-            generateSchedule();
-            renderTiersInput();
-        };
-    </script>
 </body>
 </html>
