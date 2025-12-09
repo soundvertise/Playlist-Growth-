@@ -11,15 +11,14 @@
 
 <style>
 :root {
-    --glass-bg: rgba(20,20,20,0.92);
+    --glass-bg: rgba(20, 20, 20, 0.92);
     --accent-purple: #9575cd;
     --text-main: #ffffff;
     --border-radius: 8px;
 }
 
-/* ================= BODY ================= */
 body {
-    background: #000;
+    background-color: #000;
     color: var(--text-main);
     font-family: 'Inter', sans-serif;
     margin: 0;
@@ -28,7 +27,7 @@ body {
     justify-content: center;
 }
 
-/* ================= API BAR ================= */
+/* API BAR */
 .api-config {
     background: #222;
     padding: 8px;
@@ -45,12 +44,12 @@ body {
     padding: 4px;
 }
 
-/* ================= CANVAS ================= */
+/* CANVAS */
 #canvas-area {
+    background: url('Fabhertz_aesthetic_background_wallpaper_for_a_website_landing_p_bbf86bfd-9b57-4afc-b01e-4da55c2315f3.jpeg') no-repeat center center;
+    background-size: cover;
     width: 1123px;
     height: 794px;
-    background: url('Fabhertz_aesthetic_background_wallpaper_for_a_website_landing_p_bbf86bfd-9b57-4afc-b01e-4da55c2315f3.jpeg') no-repeat center;
-    background-size: cover;
     padding: 25px;
     box-sizing: border-box;
     display: flex;
@@ -58,22 +57,19 @@ body {
     overflow: hidden;
 }
 
-/* ================= HEADER ================= */
+/* HEADER */
 header {
     display: flex;
-    justify-content: space-between;
     align-items: center;
-    height: 280px;
+    justify-content: space-between;
     margin-bottom: 15px;
-
-    /* ✅ BACKGROUND NERO RIMOSSO */
-    background: transparent;
-    padding: 0;
+    height: 280px;
+    background: transparent; /* ✅ nero rimosso */
 }
 
 header img {
     max-height: 260px;
-    object-fit: contain;
+    width: auto;
 }
 
 .header-titles {
@@ -82,10 +78,9 @@ header img {
 
 .header-titles h1 {
     font-size: 1.1rem;
-    letter-spacing: 3px;
-    text-transform: uppercase;
     margin-bottom: 10px;
-    opacity: .9;
+    text-transform: uppercase;
+    letter-spacing: 3px;
 }
 
 .artist-input {
@@ -98,11 +93,9 @@ header img {
     text-align: right;
     width: 500px;
 }
-.artist-input:focus {
-    outline: none;
-}
+.artist-input:focus { outline: none; }
 
-/* ================= GRID ================= */
+/* GRID */
 .main-container {
     display: grid;
     grid-template-columns: 300px 1fr 1fr;
@@ -112,8 +105,8 @@ header img {
 
 .col {
     background: var(--glass-bg);
-    padding: 20px;
     border-radius: var(--border-radius);
+    padding: 20px;
     display: flex;
     flex-direction: column;
     overflow: hidden;
@@ -128,22 +121,33 @@ h2 {
     color: var(--accent-purple);
 }
 
-/* ================= BUTTONS ================= */
+/* INPUTS */
+label { font-size: 0.8rem; color: #aaa; }
+input, select {
+    width: 100%;
+    padding: 8px;
+    margin-top: 4px;
+    background: #2a2a2a;
+    border: 1px solid #444;
+    border-radius: 4px;
+    color: white;
+}
+
+/* BUTTONS */
 .action-btn {
     background: #333;
-    border: 1px solid #555;
     color: white;
+    border: 1px solid #555;
     padding: 10px;
-    margin-top: auto;
     border-radius: 6px;
     cursor: pointer;
+    margin-top: auto;
 }
 .action-btn:hover {
     background: var(--accent-purple);
-    border-color: var(--accent-purple);
 }
 
-/* ================= SCHEDULE ================= */
+/* SCHEDULE */
 .schedule-row {
     background: #252525;
     border: 1px solid #333;
@@ -160,7 +164,7 @@ h2 {
     color: var(--accent-purple);
 }
 
-/* ================= SPOTIFY ================= */
+/* CENTER */
 .center-content {
     display: flex;
     flex-direction: column;
@@ -183,12 +187,10 @@ h2 {
 
 .playlist-title {
     font-size: 1.4rem;
-    font-weight: bold;
+    font-weight: 700;
     text-align: center;
 }
-.playlist-owner {
-    color: #aaa;
-}
+.playlist-owner { color: #aaa; }
 .playlist-followers {
     margin-top: 10px;
     padding: 8px 16px;
@@ -197,12 +199,11 @@ h2 {
     font-weight: bold;
 }
 
-/* ================= EXPORT ================= */
+/* EXPORT */
 .export-container {
     position: fixed;
     bottom: 30px;
     right: 30px;
-    z-index: 999;
 }
 
 .export-btn {
@@ -215,19 +216,20 @@ h2 {
     cursor: pointer;
 }
 
-/* ================= UTILS ================= */
 .hidden { display: none !important; }
 
 @media print {
-    body {
-        margin: 0;
-        padding: 0;
-    }
+    body { margin: 0; padding: 0; }
 }
 </style>
 </head>
 
 <body>
+
+<div class="api-config">
+    <input id="clientId" placeholder="Client ID">
+    <input id="clientSecret" placeholder="Client Secret">
+</div>
 
 <div id="canvas-area">
 
@@ -240,30 +242,41 @@ h2 {
 </header>
 
 <div class="main-container">
-    <div class="col">
-        <h2>Campaign Timeline</h2>
-        <div id="scheduleContainer"></div>
-        <div class="total-display" id="totalDisplay">Total: €0.00</div>
-    </div>
 
-    <div class="col">
-        <h2>Playlist Preview</h2>
-        <div class="center-content">
-            <div class="artwork-container">
-                <img src="https://via.placeholder.com/300">
-            </div>
-            <div class="playlist-title">Playlist Title</div>
-            <div class="playlist-owner">by Artist</div>
-            <div class="playlist-followers">0 FOLLOWERS</div>
+<div class="col">
+    <h2>Campaign Timeline</h2>
+    <label>Duration</label>
+    <select id="months" onchange="generateSchedule()">
+        <option value="1">1 Month</option>
+        <option value="2">2 Months</option>
+        <option value="3">3 Months</option>
+    </select>
+
+    <label>Start Date</label>
+    <input type="date" id="startDate" onchange="generateSchedule()">
+
+    <div id="scheduleContainer"></div>
+    <div class="total-display" id="totalDisplay">Total: €0.00</div>
+</div>
+
+<div class="col">
+    <h2>Playlist Preview</h2>
+    <div class="center-content">
+        <div class="artwork-container">
+            <img id="plArtwork" src="https://via.placeholder.com/300">
         </div>
-    </div>
-
-    <div class="col">
-        <h2>Target Countries</h2>
-        <div>Tier view locked</div>
+        <div class="playlist-title" id="plTitle">Playlist Title</div>
+        <div class="playlist-owner" id="plOwner">Artist</div>
+        <div class="playlist-followers" id="plFollowers">0 FOLLOWERS</div>
     </div>
 </div>
 
+<div class="col">
+    <h2>Target Countries</h2>
+    Tier selection locked
+</div>
+
+</div>
 </div>
 
 <div class="export-container">
@@ -271,6 +284,35 @@ h2 {
 </div>
 
 <script>
+function generateSchedule() {
+    const months = +monthsEl.value;
+    const start = startDate.value;
+    const cont = scheduleContainer;
+    cont.innerHTML = '';
+    if (!start) return;
+
+    let date = new Date(start);
+    let total = 0;
+
+    for (let i = 1; i <= months; i++) {
+        const row = document.createElement('div');
+        row.className = 'schedule-row';
+        row.innerHTML = `
+            <strong>Month ${i}</strong>
+            <input type="number" class="cost" placeholder="Cost €">
+        `;
+        cont.appendChild(row);
+    }
+
+    document.querySelectorAll('.cost').forEach(i => {
+        i.oninput = () => {
+            total = [...document.querySelectorAll('.cost')]
+                .reduce((s, v) => s + (+v.value || 0), 0);
+            totalDisplay.innerText = `Total: €${total.toFixed(2)}`;
+        };
+    });
+}
+
 function exportToPDF() {
     const element = document.getElementById('canvas-area');
 
@@ -298,6 +340,14 @@ function exportToPDF() {
         Object.assign(document.body.style, original);
     });
 }
+
+const monthsEl = document.getElementById('months');
+const startDate = document.getElementById('startDate');
+const scheduleContainer = document.getElementById('scheduleContainer');
+const totalDisplay = document.getElementById('totalDisplay');
+
+startDate.value = new Date().toISOString().split('T')[0];
+generateSchedule();
 </script>
 
 </body>
