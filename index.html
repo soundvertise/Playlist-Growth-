@@ -17,18 +17,18 @@
         }
 
         /* Reset Globale */
-        html, body { margin: 0; padding: 0; width: 100%; height: 100%; }
+        html, body { margin: 0; padding: 0; width: 100%; }
 
         body {
             background-color: #000;
             color: var(--text-main);
             font-family: 'Inter', sans-serif;
-            padding: 40px 0; /* Spazio per lo scroll a schermo */
+            /* Padding per visualizzazione schermo */
+            padding: 40px 0; 
             display: flex;
             flex-direction: column;
-            align-items: center;
-            justify-content: flex-start; 
-            box-sizing: border-box;
+            align-items: center; 
+            /* Importante: durante l'uso normale è centrato, in export sarà a sinistra */
         }
 
         /* --- API CONFIG --- */
@@ -48,14 +48,16 @@
             width: 100%;
         }
 
-        /* --- PDF PAGE (A4 Millimetrico) --- */
+        /* --- PDF PAGE (PIXEL PERFECT A4) --- */
+        /* 1123px x 794px = A4 Landscape esatto per jsPDF */
         .pdf-page {
             background: url('Fabhertz_aesthetic_background_wallpaper_for_a_website_landing_p_bbf86bfd-9b57-4afc-b01e-4da55c2315f3.jpeg') no-repeat center center;
             background-size: cover;
-            width: 297mm;
-            height: 210mm; /* Altezza esatta A4 */
             
-            /* Padding ridotto al minimo */
+            width: 1123px;
+            height: 794px;
+            
+            /* Padding ottimizzato */
             padding: 0px 50px 20px 50px; 
             
             box-sizing: border-box;
@@ -65,7 +67,9 @@
             position: relative;
             box-shadow: 0 0 50px rgba(0,0,0,0.8);
             overflow: hidden;
-            margin-bottom: 50px; /* Spazio a schermo tra le pagine */
+            
+            /* Margine inferiore per staccare le pagine A SCHERMO */
+            margin-bottom: 50px; 
         }
 
         /* --- HEADER --- */
@@ -105,7 +109,7 @@
             text-shadow: 0 2px 5px rgba(0,0,0,0.5);
         }
 
-        /* STILE NOME ARTISTA (TEXT DISPLAY) */
+        /* STILE NOME ARTISTA (TEXT DISPLAY - Per Export) */
         .artist-name-display {
             font-size: 2.5rem;
             font-weight: 700;
@@ -113,12 +117,12 @@
             text-shadow: 0 2px 5px rgba(0,0,0,0.5);
             border-bottom: 3px solid var(--accent-purple);
             padding-bottom: 2px;
-            display: none; /* Nascosto di default, appare in export */
+            display: none; /* Nascosto di default */
             min-width: 300px;
             color: white;
         }
 
-        /* STILE NOME ARTISTA (INPUT) */
+        /* STILE NOME ARTISTA (INPUT - Per Editing) */
         .artist-input {
             background: transparent;
             border: none;
@@ -175,7 +179,7 @@
         .col-p2::-webkit-scrollbar { width: 4px; }
         .col-p2::-webkit-scrollbar-thumb { background: #444; border-radius: 2px; }
 
-        /* --- COMMON UI ELEMENTS --- */
+        /* --- UI ELEMENTS --- */
         .action-btn { background: #333; color: white; border: 1px solid #555; padding: 8px; border-radius: 6px; cursor: pointer; width: 100%; margin-top: auto; font-size: 0.9rem; font-weight: 600; flex-shrink: 0; }
         .action-btn:hover { background: var(--accent-purple); border-color: var(--accent-purple); }
         .action-btn.locked { background: #222; color: #888; border: 1px solid #333; }
@@ -191,7 +195,7 @@
 
         input[type="checkbox"] { width: auto !important; margin-right: 8px; transform: scale(1.2); cursor: pointer; }
 
-        /* --- SCHEDULE --- */
+        /* --- LEFT/CENTER/RIGHT STYLES --- */
         #left-edit-mode, #left-view-mode { flex-grow: 1; overflow-y: auto; }
         .schedule-row { background: #252525; border: 1px solid #333; border-radius: 4px; padding: 8px; margin-bottom: 5px; }
         .schedule-header { display: flex; justify-content: space-between; font-size: 0.9rem; color: white; font-weight: 600; margin-bottom: 2px; }
@@ -201,7 +205,6 @@
         .locked-date { font-size: 0.85rem; color: #ccc; }
         .locked-cost { font-size: 1.1rem; font-weight: 700; color: white; }
 
-        /* --- SPOTIFY --- */
         .center-content { display: flex; flex-direction: column; align-items: center; justify-content: center; height: 100%; flex-grow: 1; }
         .artwork-container { width: 250px; height: 250px; box-shadow: 0 15px 40px rgba(0,0,0,0.6); margin-bottom: 15px; border-radius: 8px; overflow: hidden; background: #000; flex-shrink: 0; }
         .artwork-container img { width: 100%; height: 100%; object-fit: cover; }
@@ -209,7 +212,6 @@
         .playlist-owner { font-size: 0.9rem; color: #999; margin-bottom: 10px; text-align: center;}
         .playlist-followers { background: rgba(255,255,255,0.1); border: 1px solid rgba(255,255,255,0.2); padding: 6px 14px; border-radius: 20px; color: #fff; font-size: 0.9rem; font-weight: 700; text-transform: uppercase; letter-spacing: 1px; }
 
-        /* --- TIERS --- */
         #right-edit-mode { overflow-y: auto; height: 90%; padding-right: 5px; }
         #right-view-mode { overflow-y: auto; height: 90%; }
         .tier-group { margin-bottom: 15px; border: 1px solid #444; border-radius: 6px; overflow: hidden; background: #1a1a1a; }
@@ -221,7 +223,6 @@
         .locked-tier-title { color: var(--accent-purple); font-weight: 700; font-size: 0.95rem; text-transform: uppercase; margin-bottom: 4px; border-bottom: 1px solid #444; padding-bottom: 2px; }
         .locked-country-list { font-size: 0.8rem; line-height: 1.3; color: #eee; }
 
-        /* --- EXPORT BUTTON --- */
         .export-container { position: fixed; bottom: 30px; right: 30px; z-index: 2000; }
         .export-btn { background-color: var(--accent-purple); color: white; border: none; padding: 15px 40px; font-size: 1.1rem; font-weight: bold; border-radius: 50px; cursor: pointer; box-shadow: 0 5px 20px rgba(0,0,0,0.5); transition: transform 0.2s; }
         .export-btn:hover { transform: scale(1.05); background-color: #7e57c2; }
@@ -230,17 +231,24 @@
         .total-display { margin-top: 15px; padding-top: 10px; border-top: 1px solid #555; font-size: 1.4rem; font-weight: bold; text-align: right; color: var(--accent-purple); }
         .budget-disclaimer { font-size: 0.75rem; color: #aaa; text-align: right; margin-top: 4px; font-style: italic; opacity: 0.8; }
 
-        /* --- STILI MODALITÀ EXPORT --- */
-        /* Questi stili si attivano solo quando il body ha la classe 'export-mode' */
+        /* --- STILI MODALITÀ EXPORT (Critico per fix margini) --- */
         body.export-mode {
-            padding: 0; /* Rimuove padding esterno */
+            padding: 0 !important;
+            margin: 0 !important;
+            align-items: flex-start !important; /* Forza a sinistra */
             background-color: transparent;
+            overflow: hidden;
+        }
+        body.export-mode #export-content {
+            width: 1123px; /* Larghezza fissa */
         }
         body.export-mode .pdf-page {
-            margin-bottom: 0; /* Rimuove spazio tra le pagine per unire il PDF */
+            margin-bottom: 0 !important; /* Rimuove gap verticale tra pagine */
             box-shadow: none;
+            margin-left: 0;
+            margin-right: 0;
         }
-        /* Nasconde l'input e mostra il testo in Pagina 1 */
+        /* Scambio Input/Text in Pagina 1 */
         body.export-mode #artistInput { display: none; }
         body.export-mode #artistDisplay { display: inline-block; }
 
@@ -262,7 +270,7 @@
                 <div class="header-titles">
                     <h1>Playlist Growth Plan</h1>
                     
-                    <input type="text" id="artistInput" class="artist-input" placeholder="ARTIST NAME" value="ARTIST NAME">
+                    <input type="text" id="artistInput" class="artist-input" placeholder="ARTIST NAME" value="ARTIST NAME" oninput="syncArtistName(this.value)">
                     
                     <div id="artistDisplay" class="artist-name-display">ARTIST NAME</div>
                 </div>
@@ -380,11 +388,16 @@
     </div>
 
     <script>
-        // --- GESTIONE API KEY ---
+        // --- API KEY ---
         let hasExternalKeys = (typeof API_CONFIG !== 'undefined');
         if(hasExternalKeys) document.getElementById('apiBar').style.display = 'none';
 
-        // --- 1. LOGICA DATE E COSTI ---
+        // --- SYNC ---
+        function syncArtistName(val) {
+            document.getElementById('artistDisplay').innerText = val;
+        }
+
+        // --- LOGIC ---
         let leftLocked = false;
         
         function generateSchedule() {
@@ -395,7 +408,6 @@
             const oldValues = Array.from(oldInputs).map(i => i.value);
 
             container.innerHTML = '';
-
             if (!startDateInput) return;
 
             let currentDate = new Date(startDateInput);
@@ -410,10 +422,7 @@
                 const row = document.createElement('div');
                 row.className = 'schedule-row';
                 row.innerHTML = `
-                    <div class="schedule-header">
-                        Month ${i}
-                        <input type="hidden" class="hidden-date-range" value="${startStr} - ${endStr}">
-                    </div>
+                    <div class="schedule-header">Month ${i}<input type="hidden" class="hidden-date-range" value="${startStr} - ${endStr}"></div>
                     <div class="schedule-dates">${startStr} - ${endStr}</div>
                     <input type="number" class="monthly-cost" value="${val}" placeholder="Cost €" oninput="calculateTotal()" style="text-align:right;">
                 `;
@@ -451,7 +460,6 @@
             }
         }
 
-        // --- 2. SPOTIFY API ---
         async function getAccessToken() {
             let cid, csec;
             if (hasExternalKeys) { cid = API_CONFIG.clientId; csec = API_CONFIG.clientSecret; }
@@ -486,7 +494,6 @@
             } catch (e) { alert("Error fetching data"); }
         }
 
-        // --- 3. GESTIONE PAESI ---
         let rightLocked = false;
         const tiersData = [
             { title: "Tier 1", countries: ["Netherlands", "Australia", "Austria", "Belgium", "Canada", "Switzerland", "Germany", "Denmark", "Spain", "Finland", "France", "United Kingdom", "Ireland", "Italy", "Japan", "Norway", "New Zealand", "Sweden", "United States", "Iceland"] },
@@ -497,17 +504,7 @@
         function renderTiersInput() {
             const container = document.getElementById('tiersContainer');
             tiersData.forEach((tier, index) => {
-                container.innerHTML += `
-                    <div class="tier-group">
-                        <div class="tier-header">
-                            <span class="tier-title">${tier.title}</span>
-                            <input type="checkbox" checked onchange="toggleTierGroup(this, 'tlist-${index}')">
-                        </div>
-                        <div class="tier-countries" id="tlist-${index}">
-                            ${tier.countries.map(c => `<label class="country-label"><input type="checkbox" value="${c}" checked> ${c}</label>`).join('')}
-                        </div>
-                    </div>
-                `;
+                container.innerHTML += `<div class="tier-group"><div class="tier-header"><span class="tier-title">${tier.title}</span><input type="checkbox" checked onchange="toggleTierGroup(this, 'tlist-${index}')"></div><div class="tier-countries" id="tlist-${index}">${tier.countries.map(c => `<label class="country-label"><input type="checkbox" value="${c}" checked> ${c}</label>`).join('')}</div></div>`;
             });
         }
 
@@ -522,7 +519,6 @@
             const viewMode = document.getElementById('right-view-mode');
             const btn = document.getElementById('btn-lock-right');
             const list = document.getElementById('locked-tiers-list');
-
             if (!rightLocked) {
                 list.innerHTML = '';
                 tiersData.forEach((tier, index) => {
@@ -538,24 +534,19 @@
             }
         }
 
-        // --- 4. EXPORT PDF FIX ---
+        // --- EXPORT PDF FIX ---
         function exportToPDF() {
             const toHide = document.querySelectorAll('.hide-on-export');
             toHide.forEach(el => el.classList.add('hidden'));
 
-            // 1. Attiva la modalità export nel body
+            // Attiva modalità export (rimuove padding/margin body)
             document.body.classList.add('export-mode');
 
-            // 2. Copia il testo dell'input nel div di visualizzazione
+            // Sync Artist Name
             const artistVal = document.getElementById('artistInput').value;
             document.getElementById('artistDisplay').innerText = artistVal;
 
-            // COSTRUZIONE NOME FILE
-            let artistName = artistVal;
-            let playlistName = document.getElementById('plTitle').innerText;
-            if (artistName === 'ARTIST NAME') artistName = 'Artist';
-            if (playlistName === 'Playlist Title') playlistName = 'Playlist';
-            let finalFilename = `Soundvertise Playlist Growth: ${artistName} x ${playlistName}.pdf`;
+            let finalFilename = `Soundvertise Playlist Growth: ${artistVal}.pdf`;
 
             const element = document.getElementById('export-content');
             
@@ -566,15 +557,13 @@
                 html2canvas:  { 
                     scale: 2, 
                     useCORS: true, 
-                    scrollX: 0, scrollY: 0
+                    scrollX: 0, scrollY: 0,
+                    windowWidth: 1123 // Forza larghezza esatta
                 },
-                jsPDF:        { unit: 'mm', format: [297, 210], orientation: 'landscape' },
-                // Configurazione per tagliare esattamente dopo ogni pagina
-                pagebreak:    { mode: 'css', after: '.pdf-page' }
+                jsPDF:        { unit: 'px', format: [1123, 794], orientation: 'landscape' }
             };
 
             html2pdf().set(opt).from(element).save().then(() => {
-                // 3. Ripristina stato originale
                 toHide.forEach(el => el.classList.remove('hidden'));
                 document.body.classList.remove('export-mode');
             });
