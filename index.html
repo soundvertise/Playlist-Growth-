@@ -17,13 +17,13 @@
         }
 
         /* Reset Globale */
-        html, body { margin: 0; padding: 0; width: 100%; height: 100%; }
+        html, body { margin: 0; padding: 0; }
 
         body {
             background-color: #000;
             color: var(--text-main);
             font-family: 'Inter', sans-serif;
-            padding: 20px;
+            padding: 40px 0; /* Spazio per scrollare tra le pagine */
             display: flex;
             flex-direction: column;
             align-items: center;
@@ -33,21 +33,20 @@
 
         /* --- API CONFIG --- */
         .api-config {
-            background: #222; padding: 8px; margin-bottom: 5px;
-            border-radius: 6px; font-size: 0.8rem; display: flex; gap: 10px;
+            position: fixed; top: 0; left: 0; width: 100%; z-index: 9999;
+            background: #222; padding: 8px; 
+            text-align: center;
+            border-bottom: 1px solid #444; font-size: 0.8rem;
         }
         .api-config input { background: #333; border: 1px solid #555; color: white; padding: 4px; }
 
-        /* --- CANVAS AREA (A4 Millimetrico) --- */
-        #canvas-area {
+        /* --- PDF PAGE CONTAINER (A4 Millimetrico) --- */
+        .pdf-page {
             background: url('Fabhertz_aesthetic_background_wallpaper_for_a_website_landing_p_bbf86bfd-9b57-4afc-b01e-4da55c2315f3.jpeg') no-repeat center center;
             background-size: cover;
             width: 297mm;
             height: 210mm;
-            
-            /* PADDING SUPERIORE A 0 PER MASSIMIZZARE SPAZIO */
-            padding: 0px 50px 20px 50px;
-            
+            padding: 0px 50px 20px 50px; /* Margini interni */
             box-sizing: border-box;
             display: flex;
             flex-direction: column;
@@ -55,7 +54,7 @@
             position: relative;
             box-shadow: 0 0 50px rgba(0,0,0,0.8);
             overflow: hidden;
-            margin: 0 auto; 
+            margin-bottom: 50px; /* Spazio visivo tra le pagine a schermo */
         }
 
         /* --- HEADER --- */
@@ -63,21 +62,16 @@
             display: flex;
             align-items: center;
             justify-content: space-between;
-            
-            /* Margini ridotti al minimo assoluto */
             margin-bottom: 5px; 
-            margin-top: 0px; /* Rimosso margine superiore */
-            
+            margin-top: 5px; 
             background: transparent; 
             padding: 0;
-            /* Altezza ridotta per alzare il contenuto */
-            height: 180px; 
+            height: 220px; 
             flex-shrink: 0;
         }
 
         header img {
-            /* Logo adattato alla nuova altezza */
-            max-height: 180px;
+            max-height: 220px;
             width: auto;
             object-fit: contain;
         }
@@ -100,26 +94,35 @@
             text-shadow: 0 2px 5px rgba(0,0,0,0.5);
         }
 
+        .artist-name-display {
+            font-size: 2.5rem;
+            font-weight: 700;
+            text-align: right;
+            text-shadow: 0 2px 5px rgba(0,0,0,0.5);
+            border-bottom: 3px solid var(--accent-purple);
+            padding-bottom: 2px;
+            display: inline-block;
+            min-width: 300px;
+        }
+
         .artist-input {
             background: transparent;
             border: none;
-            border-bottom: 3px solid var(--accent-purple);
             color: white;
             font-size: 2.5rem;
             font-weight: 700;
             text-align: right;
             width: 500px;
             padding: 2px 0;
-            text-shadow: 0 2px 5px rgba(0,0,0,0.5);
+            font-family: 'Inter', sans-serif;
         }
-        .artist-input:focus { outline: none; border-bottom-color: #fff; }
+        .artist-input:focus { outline: none; }
 
         /* --- MAIN GRID --- */
         .main-container {
             display: grid;
             grid-template-columns: 300px 1fr 1fr;
             gap: 20px;
-            /* ALTEZZA PER I PANNELLI */
             height: 560px; 
             overflow: hidden;
             flex-shrink: 0;
@@ -143,13 +146,39 @@
             border-bottom: 1px solid #444;
             padding-bottom: 8px;
             margin: 0 0 10px 0;
-            /* COLORE CAMBIATO IN BIANCO */
             color: white; 
             letter-spacing: 1px;
             flex-shrink: 0;
         }
 
-        /* --- BUTTONS --- */
+        /* --- PAGE 2 SPECIFIC STYLES --- */
+        .info-block {
+            margin-bottom: 15px;
+            font-size: 0.85rem;
+            line-height: 1.4;
+            color: #ddd;
+        }
+        .info-title {
+            color: var(--accent-purple);
+            font-weight: 700;
+            text-transform: uppercase;
+            font-size: 0.9rem;
+            margin-bottom: 4px;
+            display: block;
+        }
+        .info-text {
+            display: block;
+            margin-bottom: 10px;
+        }
+        .col-p2 {
+            overflow-y: auto; /* Allow scroll if text is too long */
+        }
+        /* Custom scrollbar for text */
+        .col-p2::-webkit-scrollbar { width: 4px; }
+        .col-p2::-webkit-scrollbar-thumb { background: #444; border-radius: 2px; }
+
+
+        /* --- COMMON UI ELEMENTS --- */
         .action-btn {
             background: #333; color: white; border: 1px solid #555;
             padding: 8px; border-radius: 6px; cursor: pointer;
@@ -160,7 +189,6 @@
         .action-btn:hover { background: var(--accent-purple); border-color: var(--accent-purple); }
         .action-btn.locked { background: #222; color: #888; border: 1px solid #333; }
 
-        /* --- INPUTS --- */
         label { display: block; margin-top: 5px; font-size: 0.8rem; color: #aaa; }
         
         input[type="text"], input[type="number"], input[type="date"], select, input[type="password"] {
@@ -175,104 +203,44 @@
             transform: scale(1.2); cursor: pointer;
         }
 
-        /* --- LEFT COL: Schedule --- */
+        /* --- SCHEDULE STYLES --- */
         #left-edit-mode, #left-view-mode { flex-grow: 1; overflow-y: auto; }
-        
-        .schedule-row {
-            background: #252525; border: 1px solid #333; border-radius: 4px;
-            padding: 8px; margin-bottom: 5px;
-        }
-        .schedule-header {
-            display: flex; justify-content: space-between;
-            font-size: 0.9rem; color: white; font-weight: 600; margin-bottom: 2px;
-        }
+        .schedule-row { background: #252525; border: 1px solid #333; border-radius: 4px; padding: 8px; margin-bottom: 5px; }
+        .schedule-header { display: flex; justify-content: space-between; font-size: 0.9rem; color: white; font-weight: 600; margin-bottom: 2px; }
         .schedule-dates { font-size: 0.8rem; color: #aaa; }
-        
-        .locked-schedule-item {
-            display: flex; justify-content: space-between; align-items: center;
-            padding: 8px 0; border-bottom: 1px solid #333;
-        }
+        .locked-schedule-item { display: flex; justify-content: space-between; align-items: center; padding: 8px 0; border-bottom: 1px solid #333; }
         .locked-month { font-weight: 600; color: var(--accent-purple); font-size: 1rem; }
         .locked-date { font-size: 0.85rem; color: #ccc; }
         .locked-cost { font-size: 1.1rem; font-weight: 700; color: white; }
 
-        /* --- CENTER COL: Spotify --- */
-        .center-content {
-            display: flex; flex-direction: column; align-items: center; 
-            justify-content: center; height: 100%; flex-grow: 1;
-        }
-        .artwork-container {
-            width: 250px; height: 250px;
-            box-shadow: 0 15px 40px rgba(0,0,0,0.6);
-            margin-bottom: 15px; border-radius: 8px;
-            overflow: hidden; background: #000; flex-shrink: 0;
-        }
+        /* --- SPOTIFY STYLES --- */
+        .center-content { display: flex; flex-direction: column; align-items: center; justify-content: center; height: 100%; flex-grow: 1; }
+        .artwork-container { width: 250px; height: 250px; box-shadow: 0 15px 40px rgba(0,0,0,0.6); margin-bottom: 15px; border-radius: 8px; overflow: hidden; background: #000; flex-shrink: 0; }
         .artwork-container img { width: 100%; height: 100%; object-fit: cover; }
         .playlist-title { font-size: 1.3rem; font-weight: 700; margin: 5px 0; line-height: 1.2; text-align: center;}
         .playlist-owner { font-size: 0.9rem; color: #999; margin-bottom: 10px; text-align: center;}
-        .playlist-followers {
-            background: rgba(255,255,255,0.1); border: 1px solid rgba(255,255,255,0.2);
-            padding: 6px 14px; border-radius: 20px;
-            color: #fff; font-size: 0.9rem; font-weight: 700;
-            text-transform: uppercase; letter-spacing: 1px;
-        }
+        .playlist-followers { background: rgba(255,255,255,0.1); border: 1px solid rgba(255,255,255,0.2); padding: 6px 14px; border-radius: 20px; color: #fff; font-size: 0.9rem; font-weight: 700; text-transform: uppercase; letter-spacing: 1px; }
 
-        /* --- RIGHT COL: Tiers --- */
+        /* --- TIERS STYLES --- */
         #right-edit-mode { overflow-y: auto; height: 90%; padding-right: 5px; }
         #right-view-mode { overflow-y: auto; height: 90%; }
-
         .tier-group { margin-bottom: 15px; border: 1px solid #444; border-radius: 6px; overflow: hidden; background: #1a1a1a; }
-        .tier-header { 
-            background: #333; padding: 8px 12px; 
-            display: flex; justify-content: space-between; align-items: center;
-        }
+        .tier-header { background: #333; padding: 8px 12px; display: flex; justify-content: space-between; align-items: center; }
         .tier-title { font-weight: bold; font-size: 0.95rem; color: #fff; text-transform: uppercase;}
-        
-        .tier-countries { 
-            padding: 10px; display: grid; grid-template-columns: 1fr 1fr; gap: 8px; 
-        } 
-        .country-label { 
-            font-size: 0.85rem; display: flex; align-items: center; 
-            color: #eee; margin-top: 0; cursor: pointer;
-        }
-        
-        /* LOCKED VIEW COMPATTA */
+        .tier-countries { padding: 10px; display: grid; grid-template-columns: 1fr 1fr; gap: 8px; } 
+        .country-label { font-size: 0.85rem; display: flex; align-items: center; color: #eee; margin-top: 0; cursor: pointer; }
         .locked-tier-block { margin-bottom: 15px; }
-        .locked-tier-title { 
-            color: var(--accent-purple); font-weight: 700; font-size: 0.95rem; 
-            text-transform: uppercase; margin-bottom: 4px; border-bottom: 1px solid #444; padding-bottom: 2px;
-        }
-        .locked-country-list { 
-            font-size: 0.8rem; 
-            line-height: 1.3; color: #eee; 
-        }
+        .locked-tier-title { color: var(--accent-purple); font-weight: 700; font-size: 0.95rem; text-transform: uppercase; margin-bottom: 4px; border-bottom: 1px solid #444; padding-bottom: 2px; }
+        .locked-country-list { font-size: 0.8rem; line-height: 1.3; color: #eee; }
 
         /* --- EXPORT BUTTON --- */
         .export-container { position: fixed; bottom: 30px; right: 30px; z-index: 2000; }
-        .export-btn {
-            background-color: var(--accent-purple); color: white; border: none;
-            padding: 15px 40px; font-size: 1.1rem; font-weight: bold;
-            border-radius: 50px; cursor: pointer;
-            box-shadow: 0 5px 20px rgba(0,0,0,0.5);
-            transition: transform 0.2s;
-        }
+        .export-btn { background-color: var(--accent-purple); color: white; border: none; padding: 15px 40px; font-size: 1.1rem; font-weight: bold; border-radius: 50px; cursor: pointer; box-shadow: 0 5px 20px rgba(0,0,0,0.5); transition: transform 0.2s; }
         .export-btn:hover { transform: scale(1.05); background-color: #7e57c2; }
 
         .hidden { display: none !important; }
-        
-        /* TOTALS AND DISCLAIMER */
-        .total-display {
-            margin-top: 15px; padding-top: 10px; border-top: 1px solid #555;
-            font-size: 1.4rem; font-weight: bold; text-align: right; color: var(--accent-purple);
-        }
-        .budget-disclaimer {
-            font-size: 0.75rem;
-            color: #aaa;
-            text-align: right;
-            margin-top: 4px;
-            font-style: italic;
-            opacity: 0.8;
-        }
+        .total-display { margin-top: 15px; padding-top: 10px; border-top: 1px solid #555; font-size: 1.4rem; font-weight: bold; text-align: right; color: var(--accent-purple); }
+        .budget-disclaimer { font-size: 0.75rem; color: #aaa; text-align: right; margin-top: 4px; font-style: italic; opacity: 0.8; }
 
     </style>
 </head>
@@ -284,75 +252,126 @@
         <input type="password" id="clientSecret" placeholder="Client Secret">
     </div>
 
-    <div id="canvas-area">
-        <header>
-            <img src="LOGO WHITE NO BACKGROUND .png" alt="Soundvertise" onerror="this.style.display='none'">
-            <div class="header-titles">
-                <h1>Playlist Growth Plan</h1>
-                <input type="text" class="artist-input" placeholder="ARTIST NAME" value="ARTIST NAME">
-            </div>
-        </header>
-
-        <div class="main-container">
-            
-            <div class="col">
-                <h2>Campaign Timeline</h2>
-                
-                <div id="left-edit-mode">
-                    <label>Duration</label>
-                    <select id="months" onchange="generateSchedule()">
-                        <option value="1">1 Month</option>
-                        <option value="2">2 Months</option>
-                        <option value="3">3 Months</option>
-                        <option value="4">4 Months</option>
-                        <option value="5">5 Months</option>
-                        <option value="6">6 Months</option>
-                    </select>
-                    <label>Start Date</label>
-                    <input type="date" id="startDate" onchange="generateSchedule()">
-                    <div id="scheduleContainer" style="margin-top:15px;"></div>
+    <div id="export-content">
+        
+        <div class="pdf-page" id="page-1">
+            <header>
+                <img src="LOGO WHITE NO BACKGROUND .png" alt="Soundvertise" onerror="this.style.display='none'">
+                <div class="header-titles">
+                    <h1>Playlist Growth Plan</h1>
+                    <input type="text" class="artist-input" placeholder="ARTIST NAME" value="ARTIST NAME" oninput="syncArtistName(this.value)">
                 </div>
+            </header>
 
-                <div id="left-view-mode" class="hidden">
-                    <div id="locked-schedule-list"></div>
-                </div>
-
-                <div class="total-display" id="totalDisplay">Total: €0.00</div>
-                <div class="budget-disclaimer">(monthly ads budget not included)</div>
-                
-                <button class="action-btn hide-on-export" id="btn-lock-left" onclick="toggleLeft()">Confirm & Lock</button>
-            </div>
-
-            <div class="col">
-                <h2>Playlist Preview</h2>
-                <div class="center-content">
-                    <div id="center-edit-mode" class="hide-on-export" style="width:100%; margin-bottom:15px; text-align:center;">
-                        <input type="text" id="spotifyUrl" placeholder="Paste Spotify URL..." style="margin-bottom:8px;">
-                        <button onclick="fetchSpotifyData()" class="action-btn" style="width:auto; padding: 5px 20px;">Load Data</button>
+            <div class="main-container">
+                <div class="col">
+                    <h2>Campaign Timeline</h2>
+                    <div id="left-edit-mode">
+                        <label>Duration</label>
+                        <select id="months" onchange="generateSchedule()">
+                            <option value="1">1 Month</option>
+                            <option value="2">2 Months</option>
+                            <option value="3">3 Months</option>
+                            <option value="4">4 Months</option>
+                            <option value="5">5 Months</option>
+                            <option value="6">6 Months</option>
+                        </select>
+                        <label>Start Date</label>
+                        <input type="date" id="startDate" onchange="generateSchedule()">
+                        <div id="scheduleContainer" style="margin-top:15px;"></div>
                     </div>
-
-                    <div class="artwork-container">
-                        <img id="plArtwork" src="https://via.placeholder.com/300/111/333?text=No+Data" alt="Cover">
+                    <div id="left-view-mode" class="hidden">
+                        <div id="locked-schedule-list"></div>
                     </div>
-                    <div class="playlist-title" id="plTitle">Playlist Title</div>
-                    <div class="playlist-owner" id="plOwner">Artist Name</div>
-                    <div class="playlist-followers" id="plFollowers">0 Followers</div>
-                </div>
-            </div>
-
-            <div class="col">
-                <h2>Target Countries</h2>
-                
-                <div id="right-edit-mode">
-                    <div id="tiersContainer"></div>
+                    <div class="total-display" id="totalDisplay">Total: €0.00</div>
+                    <div class="budget-disclaimer">(monthly ads budget not included)</div>
+                    <button class="action-btn hide-on-export" id="btn-lock-left" onclick="toggleLeft()">Confirm & Lock</button>
                 </div>
 
-                <div id="right-view-mode" class="hidden">
-                    <div id="locked-tiers-list"></div>
+                <div class="col">
+                    <h2>Playlist Preview</h2>
+                    <div class="center-content">
+                        <div id="center-edit-mode" class="hide-on-export" style="width:100%; margin-bottom:15px; text-align:center;">
+                            <input type="text" id="spotifyUrl" placeholder="Paste Spotify URL..." style="margin-bottom:8px;">
+                            <button onclick="fetchSpotifyData()" class="action-btn" style="width:auto; padding: 5px 20px;">Load Data</button>
+                        </div>
+                        <div class="artwork-container">
+                            <img id="plArtwork" src="https://via.placeholder.com/300/111/333?text=No+Data" alt="Cover">
+                        </div>
+                        <div class="playlist-title" id="plTitle">Playlist Title</div>
+                        <div class="playlist-owner" id="plOwner">Artist Name</div>
+                        <div class="playlist-followers" id="plFollowers">0 Followers</div>
+                    </div>
                 </div>
-                <button class="action-btn hide-on-export" id="btn-lock-right" onclick="toggleRight()">Confirm & Lock</button>
+
+                <div class="col">
+                    <h2>Target Countries</h2>
+                    <div id="right-edit-mode">
+                        <div id="tiersContainer"></div>
+                    </div>
+                    <div id="right-view-mode" class="hidden">
+                        <div id="locked-tiers-list"></div>
+                    </div>
+                    <button class="action-btn hide-on-export" id="btn-lock-right" onclick="toggleRight()">Confirm & Lock</button>
+                </div>
             </div>
         </div>
+
+        <div class="pdf-page" id="page-2">
+            <header>
+                <img src="LOGO WHITE NO BACKGROUND .png" alt="Soundvertise" onerror="this.style.display='none'">
+                <div class="header-titles">
+                    <h1>What's Included</h1>
+                    <div class="artist-name-display" id="artistNameSync">ARTIST NAME</div>
+                </div>
+            </header>
+
+            <div class="main-container">
+                <div class="col col-p2">
+                    <h2>1 - Playlist Creation</h2>
+                    
+                    <div class="info-block">
+                        <span class="info-title">TITLE</span>
+                        <span class="info-text">We can provide recommendations and ideas based on the genre or mood we want to convey. The title is essential for capturing attention and setting the tone of the playlist.</span>
+                    </div>
+
+                    <div class="info-block">
+                        <span class="info-title">DESCRIPTION</span>
+                        <span class="info-text">We will suggest various playlist descriptions, including carefully chosen keywords designed to attract organic traffic from Spotify searches.</span>
+                    </div>
+
+                    <div class="info-block">
+                        <span class="info-title">ARTWORK</span>
+                        <span class="info-text">We’ll send you several professional artwork options inspired by Spotify’s editorial playlist designs. Feel free to share your ideas or references if you have a specific vision, so we can align with your preferences.</span>
+                    </div>
+                </div>
+
+                <div class="col col-p2">
+                    <h2>2 - Video Creation</h2>
+                    <div class="info-block">
+                        <span class="info-title">Ad Creatives</span>
+                        <span class="info-text">We'll create several creatives videos that will be used in the Meta ads campaign. The videos will be changed/tested from our side in case we think there could be any potential optimization in the campaign.</span>
+                    </div>
+                    <div class="info-block">
+                        <span class="info-title" style="color:#aaa; font-size:0.8rem;">Usage Note</span>
+                        <span class="info-text" style="font-style:italic; color:#999;">Videos are not sent for personal use, since the focus is the playlist growth and not a personal growth, and not reusable.</span>
+                    </div>
+                </div>
+
+                <div class="col col-p2">
+                    <h2>3 - Report + Support</h2>
+                    <div class="info-block">
+                        <span class="info-title">Monthly Insights</span>
+                        <span class="info-text">At the end of each 28 days campaign cycle, we send a detailed report with the insights from the Meta campaign, results and followers growth.</span>
+                    </div>
+                    <div class="info-block">
+                        <span class="info-title">Communication</span>
+                        <span class="info-text">We're always available for any update or request via mail or through a Whatsapp chat group that we can set up for faster communication.</span>
+                    </div>
+                </div>
+            </div>
+        </div>
+
     </div>
 
     <div class="export-container hide-on-export">
@@ -363,6 +382,11 @@
         // --- GESTIONE API KEY ---
         let hasExternalKeys = (typeof API_CONFIG !== 'undefined');
         if(hasExternalKeys) document.getElementById('apiBar').style.display = 'none';
+
+        // --- SYNC ARTIST NAME ---
+        function syncArtistName(val) {
+            document.getElementById('artistNameSync').innerText = val;
+        }
 
         // --- 1. LOGICA DATE E COSTI ---
         let leftLocked = false;
@@ -518,15 +542,19 @@
             }
         }
 
-        // --- 4. EXPORT PDF DYNAMICO ---
+        // --- 4. EXPORT PDF DYNAMICO MULTIPAGE ---
         function exportToPDF() {
             const toHide = document.querySelectorAll('.hide-on-export');
             toHide.forEach(el => el.classList.add('hidden'));
 
-            // Rimuovi padding e centra per l'export
+            // Prepare layout for export (remove body padding/margin)
             document.body.style.padding = '0';
-            document.body.style.justifyContent = 'flex-start';
+            document.body.style.display = 'block'; // Block display allows flow of multiple pages
             
+            // Remove margin bottom from pages for tight export
+            const pages = document.querySelectorAll('.pdf-page');
+            pages.forEach(p => p.style.marginBottom = '0');
+
             // COSTRUZIONE NOME FILE DINAMICO
             let artistName = document.querySelector('.artist-input').value;
             let playlistName = document.getElementById('plTitle').innerText;
@@ -536,7 +564,7 @@
 
             let finalFilename = `Soundvertise Playlist Growth: ${artistName} x ${playlistName}.pdf`;
 
-            const element = document.getElementById('canvas-area');
+            const element = document.getElementById('export-content');
             
             const opt = {
                 margin:       0,
@@ -547,14 +575,17 @@
                     useCORS: true, 
                     scrollX: 0, scrollY: 0
                 },
-                jsPDF:        { unit: 'mm', format: [297, 210], orientation: 'landscape' }
+                jsPDF:        { unit: 'mm', format: [297, 210], orientation: 'landscape' },
+                // Pagebreak configuration: force break after each page element
+                pagebreak:    { mode: 'css', after: '.pdf-page' }
             };
 
             html2pdf().set(opt).from(element).save().then(() => {
-                // Ripristina stile per la visualizzazione a schermo
+                // Restore screen view
                 toHide.forEach(el => el.classList.remove('hidden'));
-                document.body.style.padding = '20px';
-                document.body.style.justifyContent = 'flex-start';
+                document.body.style.padding = '40px 0';
+                document.body.style.display = 'flex';
+                pages.forEach(p => p.style.marginBottom = '50px');
             });
         }
 
