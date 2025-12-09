@@ -218,17 +218,21 @@
         .total-display { margin-top: 15px; padding-top: 10px; border-top: 1px solid #555; font-size: 1.4rem; font-weight: bold; text-align: right; color: var(--accent-purple); }
         .budget-disclaimer { font-size: 0.75rem; color: #aaa; text-align: right; margin-top: 4px; font-style: italic; opacity: 0.8; }
 
-        /* --- STILI MODALITÀ EXPORT (NO MARGINI, NO PADDING) --- */
+        /* --- STILI MODALITÀ EXPORT (NO MARGINI, NO PADDING, NO CENTERING) --- */
         body.export-mode {
             padding: 0 !important;
             margin: 0 !important;
             display: block !important;
             width: 1123px !important;
+            /* CRITICO: Allinea a sinistra per evitare margini */
+            align-items: flex-start !important;
         }
 
         body.export-mode #export-content {
             margin: 0 !important;
             padding: 0 !important;
+            /* CRITICO: Rimuove il centering */
+            align-items: flex-start !important;
         }
 
         body.export-mode .pdf-page {
@@ -328,7 +332,7 @@
                     <h2>1 - Playlist Creation</h2>
                     <div class="info-block"><span class="info-title">TITLE</span><span class="info-text">We can provide recommendations and ideas based on the genre or mood we want to convey. The title is essential for capturing attention and setting the tone of the playlist.</span></div>
                     <div class="info-block"><span class="info-title">DESCRIPTION</span><span class="info-text">We will suggest various playlist descriptions, including carefully chosen keywords designed to attract organic traffic from Spotify searches.</span></div>
-                    <div class="info-block"><span class="info-title">ARTWORK</span><span class="info-text">We’ll send you several professional artwork options inspired by Spotify’s editorial playlist designs. Feel free to share your ideas or references if you have a specific vision, so we can align with your preferences.</span></div>
+                    <div class="info-block"><span class="info-title">ARTWORK</span><span class="info-text">We'll send you several professional artwork options inspired by Spotify's editorial playlist designs. Feel free to share your ideas or references if you have a specific vision, so we can align with your preferences.</span></div>
                 </div>
 
                 <div class="col col-p2">
@@ -420,14 +424,18 @@
             } else { editMode.classList.remove('hidden'); viewMode.classList.add('hidden'); btn.innerText = "Confirm & Lock"; btn.classList.remove('locked'); rightLocked = false; }
         }
 
-        // --- EXPORT PDF FINAL ---
+        // --- EXPORT PDF FINAL (VERSIONE CORRETTA) ---
         function exportToPDF() {
             const toHide = document.querySelectorAll('.hide-on-export');
             toHide.forEach(el => el.classList.add('hidden'));
 
             // Attiva modalità export
             document.body.classList.add('export-mode');
-            window.scrollTo(0,0);
+            
+            // CRITICO: Scroll a 0,0 E rimuovi scroll del body
+            window.scrollTo(0, 0);
+            document.documentElement.scrollTop = 0;
+            document.body.scrollTop = 0;
 
             // Sync Name
             const artistVal = document.getElementById('artistInput').value;
@@ -437,21 +445,26 @@
             const element = document.getElementById('export-content');
             
             const opt = {
-                margin:       0,
+                margin:       0,  // ZERO MARGINI
                 filename:     finalFilename,
                 image:        { type: 'jpeg', quality: 1 },
                 html2canvas:  { 
                     scale: 2, 
                     useCORS: true, 
-                    scrollX: 0, scrollY: 0
+                    scrollX: 0,   // FORCE scroll position
+                    scrollY: 0,   // FORCE scroll position
+                    x: 0,         // FORCE position X
+                    y: 0,         // FORCE position Y
+                    windowWidth: 1123,  // Force dimensioni
+                    windowHeight: 1588  // 794 * 2 pagine
                 },
                 jsPDF: { 
                     unit: 'px', 
                     format: [1123, 794], 
                     orientation: 'landscape',
                     hotfixes: ["px_scaling"]
-                }
-                // PAGEBREAK è gestito dal CSS 'page-break-after: always'
+                },
+                pagebreak: { mode: ['css', 'legacy'] }  // Riconosce page-break
             };
 
             html2pdf().set(opt).from(element).save().then(() => {
