@@ -64,20 +64,20 @@
             align-items: center;
             justify-content: space-between;
             
-            /* Margini ridotti al minimo */
+            /* Margini ridotti al minimo assoluto */
             margin-bottom: 5px; 
-            margin-top: 5px; 
+            margin-top: 0px; /* Rimosso margine superiore */
             
             background: transparent; 
             padding: 0;
-            /* Altezza sufficiente per il logo grande */
-            height: 220px; 
+            /* Altezza ridotta per alzare il contenuto */
+            height: 180px; 
             flex-shrink: 0;
         }
 
         header img {
-            /* Logo grande */
-            max-height: 220px;
+            /* Logo adattato alla nuova altezza */
+            max-height: 180px;
             width: auto;
             object-fit: contain;
         }
@@ -119,11 +119,8 @@
             display: grid;
             grid-template-columns: 300px 1fr 1fr;
             gap: 20px;
-            
-            /* ALTEZZA AUMENTATA DRASTICAMENTE: 560px */
-            /* Questo spinge i pannelli fino in fondo alla pagina */
+            /* ALTEZZA PER I PANNELLI */
             height: 560px; 
-            
             overflow: hidden;
             flex-shrink: 0;
         }
@@ -146,7 +143,8 @@
             border-bottom: 1px solid #444;
             padding-bottom: 8px;
             margin: 0 0 10px 0;
-            color: var(--accent-purple);
+            /* COLORE CAMBIATO IN BIANCO */
+            color: white; 
             letter-spacing: 1px;
             flex-shrink: 0;
         }
@@ -204,7 +202,7 @@
             justify-content: center; height: 100%; flex-grow: 1;
         }
         .artwork-container {
-            width: 250px; height: 250px; /* Aumentato un po' dato che c'è spazio */
+            width: 250px; height: 250px;
             box-shadow: 0 15px 40px rgba(0,0,0,0.6);
             margin-bottom: 15px; border-radius: 8px;
             overflow: hidden; background: #000; flex-shrink: 0;
@@ -238,14 +236,14 @@
             color: #eee; margin-top: 0; cursor: pointer;
         }
         
-        /* LOCKED VIEW COMPATTA PER NON TAGLIARE */
+        /* LOCKED VIEW COMPATTA */
         .locked-tier-block { margin-bottom: 15px; }
         .locked-tier-title { 
             color: var(--accent-purple); font-weight: 700; font-size: 0.95rem; 
             text-transform: uppercase; margin-bottom: 4px; border-bottom: 1px solid #444; padding-bottom: 2px;
         }
         .locked-country-list { 
-            font-size: 0.8rem; /* Font leggermente ridotto per far entrare tutto */
+            font-size: 0.8rem; 
             line-height: 1.3; color: #eee; 
         }
 
