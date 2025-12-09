@@ -27,13 +27,13 @@
             display: flex;
             flex-direction: column;
             align-items: center;
-            justify-content: center;
+            justify-content: flex-start; /* Allinea al top anche nel browser */
             box-sizing: border-box;
         }
 
         /* --- API CONFIG --- */
         .api-config {
-            background: #222; padding: 8px; margin-bottom: 20px;
+            background: #222; padding: 8px; margin-bottom: 10px;
             border-radius: 6px; font-size: 0.8rem; display: flex; gap: 10px;
         }
         .api-config input { background: #333; border: 1px solid #555; color: white; padding: 4px; }
@@ -45,13 +45,13 @@
             width: 297mm;
             height: 210mm;
             
-            /* MODIFICA: Padding superiore ridotto drasticamente a 10px */
-            padding: 10px 50px 30px 50px;
+            /* MODIFICA CRUCIALE: Padding TOP a 0 per massimizzare lo spazio in alto */
+            padding: 0px 50px 30px 50px; 
             
             box-sizing: border-box;
             display: flex;
             flex-direction: column;
-            justify-content: flex-start; /* Allinea tutto in alto */
+            justify-content: flex-start;
             position: relative;
             box-shadow: 0 0 50px rgba(0,0,0,0.8);
             overflow: hidden;
@@ -64,13 +64,12 @@
             align-items: center;
             justify-content: space-between;
             
-            /* MODIFICA: Ridotto spazio sotto l'header */
-            margin-bottom: 10px;
+            /* MODIFICA: Ridotto spazio tra header e colonne al minimo */
+            margin-bottom: 5px; 
+            margin-top: 10px; /* Piccolo margine per non tagliare il logo in stampa */
+            
             background: transparent; 
-            
-            /* MODIFICA: Ridotto padding interno */
-            padding: 5px 0;
-            
+            padding: 0;
             height: 260px;
             flex-shrink: 0;
         }
@@ -87,6 +86,7 @@
             flex-direction: column;
             align-items: flex-end;
             justify-content: center;
+            padding-top: 20px; /* Allinea il testo visivamente al centro del logo */
         }
 
         .header-titles h1 {
@@ -117,7 +117,7 @@
             display: grid;
             grid-template-columns: 300px 1fr 1fr;
             gap: 20px;
-            height: 400px; /* Altezza fissa per lasciare spazio sotto */
+            height: 400px; /* Altezza fissa */
             overflow: hidden;
             flex-shrink: 0;
         }
@@ -549,7 +549,7 @@
                 // Ripristina stile per la visualizzazione a schermo
                 toHide.forEach(el => el.classList.remove('hidden'));
                 document.body.style.padding = '20px';
-                document.body.style.justifyContent = 'center';
+                document.body.style.justifyContent = 'flex-start';
             });
         }
 
