@@ -17,7 +17,7 @@
         }
 
         /* Reset Globale */
-        html, body { margin: 0; padding: 0; width: 100%; }
+        html, body { margin: 0; padding: 0; width: 100%; overflow-x: hidden; }
 
         body {
             background-color: #000;
@@ -27,7 +27,7 @@
             display: flex;
             flex-direction: column;
             align-items: center;
-            justify-content: flex-start;
+            justify-content: flex-start; 
             box-sizing: border-box;
         }
 
@@ -35,30 +35,27 @@
         .api-config {
             position: fixed; top: 0; left: 0; width: 100%; z-index: 9999;
             background: #222; padding: 5px; 
-            text-align: center; border-bottom: 1px solid #444; font-size: 0.8rem;
+            text-align: center;
+            border-bottom: 1px solid #444; font-size: 0.8rem;
         }
         .api-config input { background: #333; border: 1px solid #555; color: white; padding: 4px; }
 
-        /* --- EXPORT WRAPPER --- */
+        /* --- CONTAINER PRINCIPALE --- */
         #export-content {
             display: flex;
             flex-direction: column;
             align-items: center;
-            width: fit-content; /* Si adatta al contenuto, critico per export */
+            width: 100%;
+            position: relative; /* Default */
         }
 
-        /* --- PDF PAGE (Dimensioni FISSE in Pixel per evitare tagli) --- */
-        /* 1123px larghezza x 794px altezza = A4 Landscape Esatto */
+        /* --- PDF PAGE (A4 Millimetrico) --- */
         .pdf-page {
             background: url('Fabhertz_aesthetic_background_wallpaper_for_a_website_landing_p_bbf86bfd-9b57-4afc-b01e-4da55c2315f3.jpeg') no-repeat center center;
             background-size: cover;
-            
             width: 1123px;
             height: 794px;
-            
-            /* Padding ridotto al minimo e contenuto alzato */
             padding: 5px 50px 20px 50px; 
-            
             box-sizing: border-box;
             display: flex;
             flex-direction: column;
@@ -66,8 +63,7 @@
             position: relative;
             box-shadow: 0 0 50px rgba(0,0,0,0.8);
             overflow: hidden;
-            
-            margin-bottom: 50px; /* Spazio a schermo */
+            margin-bottom: 50px; 
         }
 
         /* --- HEADER --- */
@@ -75,11 +71,11 @@
             display: flex;
             align-items: center;
             justify-content: space-between;
-            margin-bottom: 0px; 
-            margin-top: 0px; 
+            margin-bottom: 5px; 
+            margin-top: 5px; 
             background: transparent; 
             padding: 0;
-            height: 180px; /* Altezza ridotta per alzare tutto */
+            height: 180px; 
             flex-shrink: 0;
         }
 
@@ -95,7 +91,7 @@
             flex-direction: column;
             align-items: flex-end;
             justify-content: center;
-            padding-top: 10px;
+            padding-top: 15px;
         }
 
         .header-titles h1 {
@@ -107,7 +103,7 @@
             text-shadow: 0 2px 5px rgba(0,0,0,0.5);
         }
 
-        /* NOME ARTISTA (TEXT - Export) */
+        /* STILE NOME ARTISTA (TEXT - Export) */
         .artist-name-display {
             font-size: 2.5rem;
             font-weight: 700;
@@ -120,7 +116,7 @@
             color: white;
         }
 
-        /* NOME ARTISTA (INPUT - Editing) */
+        /* STILE NOME ARTISTA (INPUT - Editing) */
         .artist-input {
             background: transparent;
             border: none;
@@ -141,7 +137,7 @@
             display: grid;
             grid-template-columns: 300px 1fr 1fr;
             gap: 20px;
-            height: 570px; /* Massimizzato altezza per vedere tutto */
+            height: 570px; 
             overflow: hidden;
             flex-shrink: 0;
         }
@@ -184,7 +180,13 @@
 
         label { display: block; margin-top: 5px; font-size: 0.8rem; color: #aaa; }
         
-        input, select { width: 100%; padding: 8px; margin-top: 4px; background: #2a2a2a; border: 1px solid #444; border-radius: 4px; color: white; font-size: 0.9rem; box-sizing: border-box; }
+        input[type="text"], input[type="number"], input[type="date"], select, input[type="password"] {
+            width: 100%; padding: 8px; margin-top: 4px;
+            background: #2a2a2a; border: 1px solid #444;
+            border-radius: 4px; color: white; font-size: 0.9rem;
+            box-sizing: border-box;
+        }
+
         input[type="checkbox"] { width: auto !important; margin-right: 8px; transform: scale(1.2); cursor: pointer; }
 
         /* --- SCHEDULE --- */
@@ -225,21 +227,35 @@
         .total-display { margin-top: 15px; padding-top: 10px; border-top: 1px solid #555; font-size: 1.4rem; font-weight: bold; text-align: right; color: var(--accent-purple); }
         .budget-disclaimer { font-size: 0.75rem; color: #aaa; text-align: right; margin-top: 4px; font-style: italic; opacity: 0.8; }
 
-        /* --- STILI MODALITÀ EXPORT (Critico per fix margini) --- */
+        /* --- STILI MODALITÀ EXPORT (NUCLEAR FIX) --- */
+        /* Questo sovrascrive tutto per garantire 0 margini */
         body.export-mode {
             padding: 0 !important;
             margin: 0 !important;
-            align-items: flex-start !important; /* Allinea tutto a sinistra per evitare margini */
-            justify-content: flex-start !important;
-            background-color: transparent;
-            width: 1123px; /* Larghezza forzata al pixel */
+            background: transparent !important;
+            display: block !important;
+            overflow: visible !important;
         }
+
+        body.export-mode #export-content {
+            position: absolute !important; /* Strappa dal flusso */
+            top: 0 !important;
+            left: 0 !important;
+            margin: 0 !important;
+            padding: 0 !important;
+            width: 1123px !important; /* Larghezza forzata */
+        }
+
         body.export-mode .pdf-page {
-            margin-bottom: 0 !important; /* Rimuove gap verticale */
-            box-shadow: none;
-            border: none;
+            margin: 0 !important;
+            padding: 5px 50px 20px 50px !important;
+            width: 1123px !important;
+            height: 794px !important;
+            box-shadow: none !important;
+            border-radius: 0 !important;
         }
-        /* Nasconde l'input e mostra il testo in Pagina 1 */
+
+        /* Scambio Input/Text in Pagina 1 */
         body.export-mode #artistInput { display: none; }
         body.export-mode #artistDisplay { display: inline-block; }
 
@@ -260,9 +276,7 @@
                 <img src="LOGO WHITE NO BACKGROUND .png" alt="Soundvertise" onerror="this.style.display='none'">
                 <div class="header-titles">
                     <h1>Playlist Growth Plan</h1>
-                    
                     <input type="text" id="artistInput" class="artist-input" placeholder="ARTIST NAME" value="ARTIST NAME" oninput="syncArtistName(this.value)">
-                    
                     <div id="artistDisplay" class="artist-name-display">ARTIST NAME</div>
                 </div>
             </header>
@@ -525,15 +539,15 @@
             }
         }
 
-        // --- EXPORT PDF FIX PIXEL PERFECT ---
+        // --- EXPORT PDF FINAL FIX ---
         function exportToPDF() {
             const toHide = document.querySelectorAll('.hide-on-export');
             toHide.forEach(el => el.classList.add('hidden'));
 
-            // Forza modalità export: allineamento a sinistra, 0 padding
+            // 1. Attiva la modalità export (posizionamento assoluto top-left)
             document.body.classList.add('export-mode');
 
-            // Sync Artist Name
+            // Sync Artist
             const artistVal = document.getElementById('artistInput').value;
             document.getElementById('artistDisplay').innerText = artistVal;
 
@@ -549,13 +563,12 @@
                     scale: 2, 
                     useCORS: true, 
                     scrollX: 0, scrollY: 0,
-                    // NON USARE windowWidth qui, lascia che prenda la dimensione dell'elemento
+                    x: 0, y: 0 // Forza coordinate assolute di cattura
                 },
                 jsPDF: { 
                     unit: 'px', 
-                    format: [1123, 794], // FORMATO ESATTO IN PIXEL
-                    orientation: 'landscape', 
-                    hotfixes: ["px_scaling"] 
+                    format: [1123, 794], // Dimensioni esatte A4 landscape
+                    orientation: 'landscape' 
                 }
             };
 
