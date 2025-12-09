@@ -23,11 +23,13 @@
             background-color: #000;
             color: var(--text-main);
             font-family: 'Inter', sans-serif;
-            padding: 20px;
+            /* MODIFICA: Spostato tutto più in alto */
+            padding: 40px 20px 20px 20px; 
             display: flex;
             flex-direction: column;
             align-items: center;
-            justify-content: center;
+            /* MODIFICA: Allinea all'inizio invece che al centro */
+            justify-content: flex-start; 
             box-sizing: border-box;
         }
 
@@ -44,15 +46,16 @@
             background-size: cover;
             width: 297mm;
             height: 210mm;
-            padding: 30px 50px;
+            /* MODIFICA: Ridotto leggermente il padding superiore interno */
+            padding: 20px 50px 30px 50px;
             box-sizing: border-box;
             display: flex;
             flex-direction: column;
-            justify-content: flex-start; /* Allinea tutto in alto */
+            justify-content: flex-start;
             position: relative;
             box-shadow: 0 0 50px rgba(0,0,0,0.8);
             overflow: hidden;
-            margin: 0 auto; 
+            margin: 0 auto; /* Mantiene centrato orizzontalmente */
         }
 
         /* --- HEADER --- */
@@ -521,7 +524,6 @@
             if (artistName === 'ARTIST NAME') artistName = 'Artist';
             if (playlistName === 'Playlist Title') playlistName = 'Playlist';
 
-            // Crea nome file: "Soundvertise Playlist Growth: Artist x Playlist.pdf"
             let finalFilename = `Soundvertise Playlist Growth: ${artistName} x ${playlistName}.pdf`;
 
             const element = document.getElementById('canvas-area');
