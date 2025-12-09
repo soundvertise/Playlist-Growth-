@@ -21,6 +21,8 @@
             color: var(--text-main);
             font-family: 'Inter', sans-serif;
             margin: 0;
+            /* Padding del body per la visualizzazione a schermo. 
+               Non influisce sull'export grazie al fix JS. */
             padding: 20px;
             display: flex;
             flex-direction: column;
@@ -36,14 +38,15 @@
         }
         .api-config input { background: #333; border: 1px solid #555; color: white; padding: 4px; }
 
-        /* --- CANVAS AREA (Fix Pixel Perfect A4 Landscape) --- */
-        /* 1123px x 794px = A4 Landscape @ 96 DPI standard */
+        /* --- CANVAS AREA (Pixel Perfect A4 Landscape) --- */
+        /* 1123px x 794px è la risoluzione standard per A4 orizzontale a 96 DPI */
         #canvas-area {
             background: url('Fabhertz_aesthetic_background_wallpaper_for_a_website_landing_p_bbf86bfd-9b57-4afc-b01e-4da55c2315f3.jpeg') no-repeat center center;
             background-size: cover;
             width: 1123px;
             height: 794px;
-            padding: 40px;
+            /* Ridotto padding interno per fare spazio al logo grande */
+            padding: 25px; 
             box-sizing: border-box;
             display: flex;
             flex-direction: column;
@@ -57,15 +60,18 @@
             display: flex;
             align-items: center;
             justify-content: space-between;
-            margin-bottom: 20px;
+            /* Ridotto margine inferiore */
+            margin-bottom: 15px;
             background: rgba(0,0,0,0.6);
-            padding: 15px 30px;
+            padding: 10px 25px;
             border-radius: 12px;
-            height: 100px; /* Header più alto per logo grande */
+            /* Aumentata altezza per contenere il logo gigante */
+            height: 280px; 
         }
 
         header img {
-            max-height: 130px; /* LOGO MOLTO PIÙ GRANDE */
+            /* RADDOPPIATO: da 130px a 260px */
+            max-height: 260px;
             width: auto;
             object-fit: contain;
         }
@@ -79,8 +85,8 @@
         }
 
         .header-titles h1 {
-            font-size: 1rem;
-            margin: 0 0 5px 0;
+            font-size: 1.1rem;
+            margin: 0 0 10px 0;
             text-transform: uppercase;
             letter-spacing: 3px;
             opacity: 0.9;
@@ -89,13 +95,13 @@
         .artist-input {
             background: transparent;
             border: none;
-            border-bottom: 2px solid var(--accent-purple);
+            border-bottom: 3px solid var(--accent-purple);
             color: white;
-            font-size: 2.2rem;
+            font-size: 2.5rem;
             font-weight: 700;
             text-align: right;
-            width: 450px;
-            padding: 0;
+            width: 500px;
+            padding: 5px 0;
         }
         .artist-input:focus { outline: none; border-bottom-color: #fff; }
 
@@ -103,7 +109,8 @@
         .main-container {
             display: grid;
             grid-template-columns: 300px 1fr 1fr;
-            gap: 20px;
+            /* Ridotto gap tra le colonne */
+            gap: 15px;
             height: 100%;
             overflow: hidden;
         }
@@ -142,28 +149,20 @@
         .action-btn:hover { background: var(--accent-purple); border-color: var(--accent-purple); }
         .action-btn.locked { background: #222; color: #888; border: 1px solid #333; }
 
-        /* --- INPUTS FIX --- */
+        /* --- INPUTS --- */
         label { display: block; margin-top: 5px; font-size: 0.8rem; color: #aaa; }
         
-        /* Regola generale per input di testo e select */
         input[type="text"], input[type="number"], input[type="date"], select, input[type="password"] {
-            width: 100%; 
-            padding: 8px; 
-            margin-top: 4px;
-            background: #2a2a2a; 
-            border: 1px solid #444;
-            border-radius: 4px; 
-            color: white; 
-            font-size: 0.9rem;
+            width: 100%; padding: 8px; margin-top: 4px;
+            background: #2a2a2a; border: 1px solid #444;
+            border-radius: 4px; color: white; font-size: 0.9rem;
             box-sizing: border-box;
         }
 
-        /* FIX CHECKBOXES: Reset width per evitare che siano giganti */
+        /* CHECKBOXES FIX */
         input[type="checkbox"] {
-            width: auto !important;
-            margin-right: 8px;
-            transform: scale(1.2); /* Leggermente più grandi */
-            cursor: pointer;
+            width: auto !important; margin-right: 8px;
+            transform: scale(1.2); cursor: pointer;
         }
 
         /* --- LEFT COL: Schedule --- */
@@ -193,13 +192,13 @@
             justify-content: center; height: 100%; flex-grow: 1;
         }
         .artwork-container {
-            width: 250px; height: 250px;
+            width: 230px; height: 230px; /* Ridotto leggermente per spazio */
             box-shadow: 0 15px 40px rgba(0,0,0,0.6);
             margin-bottom: 20px; border-radius: 8px;
             overflow: hidden; background: #000;
         }
         .artwork-container img { width: 100%; height: 100%; object-fit: cover; }
-        .playlist-title { font-size: 1.5rem; font-weight: 700; margin: 5px 0; line-height: 1.2; text-align: center;}
+        .playlist-title { font-size: 1.4rem; font-weight: 700; margin: 5px 0; line-height: 1.2; text-align: center;}
         .playlist-owner { font-size: 1rem; color: #999; margin-bottom: 15px; text-align: center;}
         .playlist-followers {
             background: rgba(255,255,255,0.1); border: 1px solid rgba(255,255,255,0.2);
@@ -208,7 +207,7 @@
             text-transform: uppercase; letter-spacing: 1px;
         }
 
-        /* --- RIGHT COL: Tiers FIX --- */
+        /* --- RIGHT COL: Tiers --- */
         #right-edit-mode { overflow-y: auto; height: 90%; padding-right: 5px; }
         #right-view-mode { overflow-y: auto; height: 90%; }
 
@@ -219,20 +218,12 @@
         }
         .tier-title { font-weight: bold; font-size: 0.95rem; color: #fff; text-transform: uppercase;}
         
-        /* GRIGLIA PAESI AGGIUSTATA: 2 Colonne per leggibilità */
         .tier-countries { 
-            padding: 10px; 
-            display: grid; 
-            grid-template-columns: 1fr 1fr; /* 2 Colonne invece di 3 per dare spazio ai nomi */
-            gap: 8px; 
+            padding: 10px; display: grid; grid-template-columns: 1fr 1fr; gap: 8px; 
         } 
         .country-label { 
-            font-size: 0.85rem; 
-            display: flex; 
-            align-items: center; 
-            color: #eee; 
-            margin-top: 0; /* Override del margine generico */
-            cursor: pointer;
+            font-size: 0.85rem; display: flex; align-items: center; 
+            color: #eee; margin-top: 0; cursor: pointer;
         }
         
         /* LOCKED VIEW */
@@ -357,7 +348,6 @@
             const months = parseInt(document.getElementById('months').value);
             const startDateInput = document.getElementById('startDate').value;
             const container = document.getElementById('scheduleContainer');
-            
             const oldInputs = document.querySelectorAll('.monthly-cost');
             const oldValues = Array.from(oldInputs).map(i => i.value);
 
@@ -410,28 +400,11 @@
                     const dates = row.querySelector('.hidden-date-range').value;
                     const costVal = row.querySelector('.monthly-cost').value;
                     const cost = costVal ? `€${parseFloat(costVal).toLocaleString()}` : '€0';
-
-                    list.innerHTML += `
-                        <div class="locked-schedule-item">
-                            <div>
-                                <div class="locked-month">Month ${index + 1}</div>
-                                <span class="locked-date">${dates}</span>
-                            </div>
-                            <div class="locked-cost">${cost}</div>
-                        </div>
-                    `;
+                    list.innerHTML += `<div class="locked-schedule-item"><div><div class="locked-month">Month ${index + 1}</div><span class="locked-date">${dates}</span></div><div class="locked-cost">${cost}</div></div>`;
                 });
-                editMode.classList.add('hidden');
-                viewMode.classList.remove('hidden');
-                btn.innerText = "Edit Plan";
-                btn.classList.add('locked');
-                leftLocked = true;
+                editMode.classList.add('hidden'); viewMode.classList.remove('hidden'); btn.innerText = "Edit Plan"; btn.classList.add('locked'); leftLocked = true;
             } else {
-                editMode.classList.remove('hidden');
-                viewMode.classList.add('hidden');
-                btn.innerText = "Confirm & Lock";
-                btn.classList.remove('locked');
-                leftLocked = false;
+                editMode.classList.remove('hidden'); viewMode.classList.add('hidden'); btn.innerText = "Confirm & Lock"; btn.classList.remove('locked'); leftLocked = false;
             }
         }
 
@@ -440,9 +413,7 @@
             let cid, csec;
             if (hasExternalKeys) { cid = API_CONFIG.clientId; csec = API_CONFIG.clientSecret; }
             else { cid = document.getElementById('clientId').value; csec = document.getElementById('clientSecret').value; }
-
             if(!cid || !csec) { alert("API Keys Missing"); return null; }
-
             try {
                 const result = await fetch('https://accounts.spotify.com/api/token', {
                     method: 'POST',
@@ -458,10 +429,8 @@
             const url = document.getElementById('spotifyUrl').value;
             const match = url.match(/playlist\/([a-zA-Z0-9]+)/);
             if (!match) return alert("Invalid URL");
-            
             const token = await getAccessToken();
             if (!token) return;
-
             try {
                 const result = await fetch(`https://api.spotify.com/v1/playlists/${match[1]}`, {
                     headers: { 'Authorization': 'Bearer ' + token }
@@ -477,18 +446,9 @@
         // --- 3. GESTIONE PAESI ---
         let rightLocked = false;
         const tiersData = [
-            {
-                title: "Tier 1",
-                countries: ["Netherlands", "Australia", "Austria", "Belgium", "Canada", "Switzerland", "Germany", "Denmark", "Spain", "Finland", "France", "United Kingdom", "Ireland", "Italy", "Japan", "Norway", "New Zealand", "Sweden", "United States", "Iceland"]
-            },
-            {
-                title: "Tier 2",
-                countries: ["Argentina", "Brazil", "Mexico", "Colombia", "Turkey", "Chile", "South Africa", "Croatia", "Hungary", "Czech Republic", "Estonia", "Greece", "Hong Kong", "Luxembourg", "Latvia", "Malta", "Peru", "Poland", "Portugal", "Uruguay", "Slovenia", "Slovakia"]
-            },
-            {
-                title: "Tier 3",
-                countries: ["Indonesia", "Philippines", "Thailand", "Malaysia", "Nigeria", "Kenya"]
-            }
+            { title: "Tier 1", countries: ["Netherlands", "Australia", "Austria", "Belgium", "Canada", "Switzerland", "Germany", "Denmark", "Spain", "Finland", "France", "United Kingdom", "Ireland", "Italy", "Japan", "Norway", "New Zealand", "Sweden", "United States", "Iceland"] },
+            { title: "Tier 2", countries: ["Argentina", "Brazil", "Mexico", "Colombia", "Turkey", "Chile", "South Africa", "Croatia", "Hungary", "Czech Republic", "Estonia", "Greece", "Hong Kong", "Luxembourg", "Latvia", "Malta", "Peru", "Poland", "Portugal", "Uruguay", "Slovenia", "Slovakia"] },
+            { title: "Tier 3", countries: ["Indonesia", "Philippines", "Thailand", "Malaysia", "Nigeria", "Kenya"] }
         ];
 
         function renderTiersInput() {
@@ -501,10 +461,7 @@
                             <input type="checkbox" checked onchange="toggleTierGroup(this, 'tlist-${index}')">
                         </div>
                         <div class="tier-countries" id="tlist-${index}">
-                            ${tier.countries.map(c => `
-                                <label class="country-label">
-                                    <input type="checkbox" value="${c}" checked> ${c}
-                                </label>`).join('')}
+                            ${tier.countries.map(c => `<label class="country-label"><input type="checkbox" value="${c}" checked> ${c}</label>`).join('')}
                         </div>
                     </div>
                 `;
@@ -529,43 +486,34 @@
                     const groupInputs = document.querySelectorAll(`#tlist-${index} input:checked:not(:disabled)`);
                     if (groupInputs.length > 0) {
                         const countriesText = Array.from(groupInputs).map(i => i.value).join(', ');
-                        
-                        list.innerHTML += `
-                            <div class="locked-tier-block">
-                                <div class="locked-tier-title">${tier.title}</div>
-                                <div class="locked-country-list">${countriesText}.</div>
-                            </div>
-                        `;
+                        list.innerHTML += `<div class="locked-tier-block"><div class="locked-tier-title">${tier.title}</div><div class="locked-country-list">${countriesText}.</div></div>`;
                     }
                 });
-                editMode.classList.add('hidden');
-                viewMode.classList.remove('hidden');
-                btn.innerText = "Edit Countries";
-                btn.classList.add('locked');
-                rightLocked = true;
+                editMode.classList.add('hidden'); viewMode.classList.remove('hidden'); btn.innerText = "Edit Countries"; btn.classList.add('locked'); rightLocked = true;
             } else {
-                editMode.classList.remove('hidden');
-                viewMode.classList.add('hidden');
-                btn.innerText = "Confirm & Lock";
-                btn.classList.remove('locked');
-                rightLocked = false;
+                editMode.classList.remove('hidden'); viewMode.classList.add('hidden'); btn.innerText = "Confirm & Lock"; btn.classList.remove('locked'); rightLocked = false;
             }
         }
 
-        // --- 4. EXPORT PDF FIX ---
+        // --- 4. EXPORT PDF FIX MARGINI ---
         function exportToPDF() {
             const toHide = document.querySelectorAll('.hide-on-export');
             toHide.forEach(el => el.classList.add('hidden'));
-
             const element = document.getElementById('canvas-area');
             
             const opt = {
-                margin:       0,
+                margin:       0, // ZERO MARGINI
                 filename:     'Playlist_Growth_Plan.pdf',
                 image:        { type: 'jpeg', quality: 1 },
-                html2canvas:  { scale: 2, useCORS: true, scrollX: 0, scrollY: 0 },
-                // DIMENSIONI PIXEL FISSE = 0 MARGINI BIANCHI
-                jsPDF:        { unit: 'px', format: [1123, 794], orientation: 'landscape', hotfixes: ["px_scaling"] }
+                html2canvas:  { 
+                    scale: 2, 
+                    useCORS: true, 
+                    scrollX: 0, scrollY: 0,
+                    // FORZA LA CATTURA ALLA DIMENSIONE ESATTA DELL'ELEMENTO
+                    windowWidth: 1123, windowHeight: 794 
+                },
+                // FORZA IL PDF ALLA DIMENSIONE ESATTA IN PIXEL
+                jsPDF: { unit: 'px', format: [1123, 794], orientation: 'landscape', hotfixes: ["px_scaling"] }
             };
 
             html2pdf().set(opt).from(element).save().then(() => {
