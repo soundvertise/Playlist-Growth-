@@ -27,7 +27,7 @@
             display: flex;
             flex-direction: column;
             align-items: center;
-            justify-content: flex-start; /* Allinea al top anche nel browser */
+            justify-content: flex-start; 
             box-sizing: border-box;
         }
 
@@ -45,8 +45,8 @@
             width: 297mm;
             height: 210mm;
             
-            /* MODIFICA CRUCIALE: Padding TOP a 0 per massimizzare lo spazio in alto */
-            padding: 0px 50px 30px 50px; 
+            /* Padding ridotto per massimizzare spazio verticale */
+            padding: 10px 50px 20px 50px; 
             
             box-sizing: border-box;
             display: flex;
@@ -63,19 +63,16 @@
             display: flex;
             align-items: center;
             justify-content: space-between;
-            
-            /* MODIFICA: Ridotto spazio tra header e colonne al minimo */
             margin-bottom: 5px; 
-            margin-top: 10px; /* Piccolo margine per non tagliare il logo in stampa */
-            
+            margin-top: 5px; 
             background: transparent; 
             padding: 0;
-            height: 260px;
+            height: 250px; /* Ridotto leggermente per dare spazio sotto */
             flex-shrink: 0;
         }
 
         header img {
-            max-height: 260px;
+            max-height: 250px;
             width: auto;
             object-fit: contain;
         }
@@ -86,7 +83,7 @@
             flex-direction: column;
             align-items: flex-end;
             justify-content: center;
-            padding-top: 20px; /* Allinea il testo visivamente al centro del logo */
+            padding-top: 20px;
         }
 
         .header-titles h1 {
@@ -117,7 +114,10 @@
             display: grid;
             grid-template-columns: 300px 1fr 1fr;
             gap: 20px;
-            height: 400px; /* Altezza fissa */
+            
+            /* MODIFICA: Aumentata altezza pannelli per vedere meglio */
+            height: 490px; 
+            
             overflow: hidden;
             flex-shrink: 0;
         }
