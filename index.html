@@ -33,7 +33,7 @@
 
         /* --- API CONFIG --- */
         .api-config {
-            background: #222; padding: 8px; margin-bottom: 10px;
+            background: #222; padding: 8px; margin-bottom: 5px;
             border-radius: 6px; font-size: 0.8rem; display: flex; gap: 10px;
         }
         .api-config input { background: #333; border: 1px solid #555; color: white; padding: 4px; }
@@ -45,8 +45,8 @@
             width: 297mm;
             height: 210mm;
             
-            /* Padding ridotto per massimizzare spazio verticale */
-            padding: 10px 50px 20px 50px; 
+            /* PADDING SUPERIORE A 0 PER MASSIMIZZARE SPAZIO */
+            padding: 0px 50px 20px 50px;
             
             box-sizing: border-box;
             display: flex;
@@ -63,16 +63,21 @@
             display: flex;
             align-items: center;
             justify-content: space-between;
+            
+            /* Margini ridotti al minimo */
             margin-bottom: 5px; 
             margin-top: 5px; 
+            
             background: transparent; 
             padding: 0;
-            height: 250px; /* Ridotto leggermente per dare spazio sotto */
+            /* Altezza sufficiente per il logo grande */
+            height: 220px; 
             flex-shrink: 0;
         }
 
         header img {
-            max-height: 250px;
+            /* Logo grande */
+            max-height: 220px;
             width: auto;
             object-fit: contain;
         }
@@ -83,12 +88,12 @@
             flex-direction: column;
             align-items: flex-end;
             justify-content: center;
-            padding-top: 20px;
+            padding-top: 15px;
         }
 
         .header-titles h1 {
             font-size: 1.1rem;
-            margin: 0 0 10px 0;
+            margin: 0 0 5px 0;
             text-transform: uppercase;
             letter-spacing: 3px;
             opacity: 0.9;
@@ -104,7 +109,7 @@
             font-weight: 700;
             text-align: right;
             width: 500px;
-            padding: 5px 0;
+            padding: 2px 0;
             text-shadow: 0 2px 5px rgba(0,0,0,0.5);
         }
         .artist-input:focus { outline: none; border-bottom-color: #fff; }
@@ -115,8 +120,9 @@
             grid-template-columns: 300px 1fr 1fr;
             gap: 20px;
             
-            /* MODIFICA: Aumentata altezza pannelli per vedere meglio */
-            height: 490px; 
+            /* ALTEZZA AUMENTATA DRASTICAMENTE: 560px */
+            /* Questo spinge i pannelli fino in fondo alla pagina */
+            height: 560px; 
             
             overflow: hidden;
             flex-shrink: 0;
@@ -138,8 +144,8 @@
             font-size: 1.1rem;
             text-transform: uppercase;
             border-bottom: 1px solid #444;
-            padding-bottom: 10px;
-            margin: 0 0 15px 0;
+            padding-bottom: 8px;
+            margin: 0 0 10px 0;
             color: var(--accent-purple);
             letter-spacing: 1px;
             flex-shrink: 0;
@@ -148,7 +154,7 @@
         /* --- BUTTONS --- */
         .action-btn {
             background: #333; color: white; border: 1px solid #555;
-            padding: 10px; border-radius: 6px; cursor: pointer;
+            padding: 8px; border-radius: 6px; cursor: pointer;
             width: 100%; margin-top: auto;
             font-size: 0.9rem; font-weight: 600;
             flex-shrink: 0;
@@ -176,17 +182,17 @@
         
         .schedule-row {
             background: #252525; border: 1px solid #333; border-radius: 4px;
-            padding: 10px; margin-bottom: 8px;
+            padding: 8px; margin-bottom: 5px;
         }
         .schedule-header {
             display: flex; justify-content: space-between;
-            font-size: 0.9rem; color: white; font-weight: 600; margin-bottom: 4px;
+            font-size: 0.9rem; color: white; font-weight: 600; margin-bottom: 2px;
         }
         .schedule-dates { font-size: 0.8rem; color: #aaa; }
         
         .locked-schedule-item {
             display: flex; justify-content: space-between; align-items: center;
-            padding: 10px 0; border-bottom: 1px solid #333;
+            padding: 8px 0; border-bottom: 1px solid #333;
         }
         .locked-month { font-weight: 600; color: var(--accent-purple); font-size: 1rem; }
         .locked-date { font-size: 0.85rem; color: #ccc; }
@@ -198,7 +204,7 @@
             justify-content: center; height: 100%; flex-grow: 1;
         }
         .artwork-container {
-            width: 200px; height: 200px;
+            width: 250px; height: 250px; /* Aumentato un po' dato che c'è spazio */
             box-shadow: 0 15px 40px rgba(0,0,0,0.6);
             margin-bottom: 15px; border-radius: 8px;
             overflow: hidden; background: #000; flex-shrink: 0;
@@ -232,14 +238,15 @@
             color: #eee; margin-top: 0; cursor: pointer;
         }
         
-        /* LOCKED VIEW */
-        .locked-tier-block { margin-bottom: 20px; }
+        /* LOCKED VIEW COMPATTA PER NON TAGLIARE */
+        .locked-tier-block { margin-bottom: 15px; }
         .locked-tier-title { 
-            color: var(--accent-purple); font-weight: 700; font-size: 1rem; 
-            text-transform: uppercase; margin-bottom: 5px; border-bottom: 1px solid #444; padding-bottom: 4px;
+            color: var(--accent-purple); font-weight: 700; font-size: 0.95rem; 
+            text-transform: uppercase; margin-bottom: 4px; border-bottom: 1px solid #444; padding-bottom: 2px;
         }
         .locked-country-list { 
-            font-size: 0.9rem; line-height: 1.5; color: #eee; 
+            font-size: 0.8rem; /* Font leggermente ridotto per far entrare tutto */
+            line-height: 1.3; color: #eee; 
         }
 
         /* --- EXPORT BUTTON --- */
