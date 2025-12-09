@@ -45,7 +45,7 @@
             flex-direction: column;
             align-items: center;
             width: 100%;
-            background: #000; /* Fondo nero di sicurezza */
+            background: #000;
         }
 
         /* --- PDF PAGE (A4 Millimetrico) --- */
@@ -62,7 +62,20 @@
             position: relative;
             overflow: hidden;
             margin-bottom: 50px; 
-            box-shadow: 0 0 50px rgba(0,0,0,0.5); /* Ombra solo visuale */
+            box-shadow: 0 0 50px rgba(0,0,0,0.5);
+        }
+
+        /* --- PAGINA NERA (SPACER) --- */
+        .pdf-page.spacer-page {
+            background: #000 !important; /* Nero puro */
+            justify-content: center;
+            align-items: center;
+            box-shadow: none;
+        }
+        .spacer-logo {
+            max-width: 300px;
+            opacity: 0.3; /* Logo in trasparenza al centro */
+            filter: grayscale(100%);
         }
 
         /* --- HEADER --- */
@@ -102,7 +115,7 @@
             text-shadow: 0 2px 5px rgba(0,0,0,0.5);
         }
 
-        /* STILE NOME ARTISTA (TEXT - Export) */
+        /* STILE NOME ARTISTA */
         .artist-name-display {
             font-size: 2.5rem;
             font-weight: 700;
@@ -115,7 +128,6 @@
             color: white;
         }
 
-        /* STILE NOME ARTISTA (INPUT - Editing) */
         .artist-input {
             background: transparent;
             border: none;
@@ -178,17 +190,10 @@
         .action-btn.locked { background: #222; color: #888; border: 1px solid #333; }
 
         label { display: block; margin-top: 5px; font-size: 0.8rem; color: #aaa; }
-        
-        input[type="text"], input[type="number"], input[type="date"], select, input[type="password"] {
-            width: 100%; padding: 8px; margin-top: 4px;
-            background: #2a2a2a; border: 1px solid #444;
-            border-radius: 4px; color: white; font-size: 0.9rem;
-            box-sizing: border-box;
-        }
-
+        input, select { width: 100%; padding: 8px; margin-top: 4px; background: #2a2a2a; border: 1px solid #444; border-radius: 4px; color: white; font-size: 0.9rem; box-sizing: border-box; }
         input[type="checkbox"] { width: auto !important; margin-right: 8px; transform: scale(1.2); cursor: pointer; }
 
-        /* --- SCHEDULE --- */
+        /* --- LEFT/CENTER/RIGHT STYLES --- */
         #left-edit-mode, #left-view-mode { flex-grow: 1; overflow-y: auto; }
         .schedule-row { background: #252525; border: 1px solid #333; border-radius: 4px; padding: 8px; margin-bottom: 5px; }
         .schedule-header { display: flex; justify-content: space-between; font-size: 0.9rem; color: white; font-weight: 600; margin-bottom: 2px; }
@@ -198,7 +203,6 @@
         .locked-date { font-size: 0.85rem; color: #ccc; }
         .locked-cost { font-size: 1.1rem; font-weight: 700; color: white; }
 
-        /* --- SPOTIFY --- */
         .center-content { display: flex; flex-direction: column; align-items: center; justify-content: center; height: 100%; flex-grow: 1; }
         .artwork-container { width: 250px; height: 250px; box-shadow: 0 15px 40px rgba(0,0,0,0.6); margin-bottom: 15px; border-radius: 8px; overflow: hidden; background: #000; flex-shrink: 0; }
         .artwork-container img { width: 100%; height: 100%; object-fit: cover; }
@@ -206,7 +210,6 @@
         .playlist-owner { font-size: 0.9rem; color: #999; margin-bottom: 10px; text-align: center;}
         .playlist-followers { background: rgba(255,255,255,0.1); border: 1px solid rgba(255,255,255,0.2); padding: 6px 14px; border-radius: 20px; color: #fff; font-size: 0.9rem; font-weight: 700; text-transform: uppercase; letter-spacing: 1px; }
 
-        /* --- TIERS --- */
         #right-edit-mode { overflow-y: auto; height: 90%; padding-right: 5px; }
         #right-view-mode { overflow-y: auto; height: 90%; }
         .tier-group { margin-bottom: 15px; border: 1px solid #444; border-radius: 6px; overflow: hidden; background: #1a1a1a; }
@@ -226,34 +229,29 @@
         .total-display { margin-top: 15px; padding-top: 10px; border-top: 1px solid #555; font-size: 1.4rem; font-weight: bold; text-align: right; color: var(--accent-purple); }
         .budget-disclaimer { font-size: 0.75rem; color: #aaa; text-align: right; margin-top: 4px; font-style: italic; opacity: 0.8; }
 
-        /* --- STILI MODALITÀ EXPORT (Standard Flow, No Absolute) --- */
+        /* --- STILI MODALITÀ EXPORT (FIX MARGINI DEFINITIVO) --- */
         body.export-mode {
+            /* Disattiva flexbox e centra tutto a sinistra */
+            display: block !important; 
             padding: 0 !important;
             margin: 0 !important;
-            /* Forza allineamento a sinistra */
-            align-items: flex-start !important; 
-            justify-content: flex-start !important;
-            background-color: transparent;
-            width: 1123px; /* Larghezza esatta A4 */
+            background: #000;
         }
 
         body.export-mode #export-content {
+            /* Forza l'allineamento a sinistra */
             width: 1123px !important;
             margin: 0 !important;
-            padding: 0 !important;
+            transform: none !important;
+            left: 0 !important;
         }
 
         body.export-mode .pdf-page {
-            margin: 0 !important;
-            padding: 5px 50px 20px 50px !important;
-            width: 1123px !important;
-            height: 794px !important;
+            margin-bottom: 0 !important;
             box-shadow: none !important;
-            border: none !important;
-            border-radius: 0 !important;
+            margin-left: 0 !important; /* Sicurezza extra */
         }
 
-        /* Scambio Input/Text in Pagina 1 */
         body.export-mode #artistInput { display: none; }
         body.export-mode #artistDisplay { display: inline-block; }
 
@@ -274,7 +272,6 @@
                 <img src="LOGO WHITE NO BACKGROUND .png" alt="Soundvertise" onerror="this.style.display='none'">
                 <div class="header-titles">
                     <h1>Playlist Growth Plan</h1>
-                    
                     <input type="text" id="artistInput" class="artist-input" placeholder="ARTIST NAME" value="ARTIST NAME" oninput="syncArtistName(this.value)">
                     <div id="artistDisplay" class="artist-name-display">ARTIST NAME</div>
                 </div>
@@ -297,9 +294,7 @@
                         <input type="date" id="startDate" onchange="generateSchedule()">
                         <div id="scheduleContainer" style="margin-top:15px;"></div>
                     </div>
-                    <div id="left-view-mode" class="hidden">
-                        <div id="locked-schedule-list"></div>
-                    </div>
+                    <div id="left-view-mode" class="hidden"><div id="locked-schedule-list"></div></div>
                     <div class="total-display" id="totalDisplay">Total: €0.00</div>
                     <div class="budget-disclaimer">(monthly ads budget not included)</div>
                     <button class="action-btn hide-on-export" id="btn-lock-left" onclick="toggleLeft()">Confirm & Lock</button>
@@ -312,9 +307,7 @@
                             <input type="text" id="spotifyUrl" placeholder="Paste Spotify URL..." style="margin-bottom:8px;">
                             <button onclick="fetchSpotifyData()" class="action-btn" style="width:auto; padding: 5px 20px;">Load Data</button>
                         </div>
-                        <div class="artwork-container">
-                            <img id="plArtwork" src="https://via.placeholder.com/300/111/333?text=No+Data" alt="Cover">
-                        </div>
+                        <div class="artwork-container"><img id="plArtwork" src="https://via.placeholder.com/300/111/333?text=No+Data" alt="Cover"></div>
                         <div class="playlist-title" id="plTitle">Playlist Title</div>
                         <div class="playlist-owner" id="plOwner">Artist Name</div>
                         <div class="playlist-followers" id="plFollowers">0 Followers</div>
@@ -323,15 +316,15 @@
 
                 <div class="col">
                     <h2>Target Countries</h2>
-                    <div id="right-edit-mode">
-                        <div id="tiersContainer"></div>
-                    </div>
-                    <div id="right-view-mode" class="hidden">
-                        <div id="locked-tiers-list"></div>
-                    </div>
+                    <div id="right-edit-mode"><div id="tiersContainer"></div></div>
+                    <div id="right-view-mode" class="hidden"><div id="locked-tiers-list"></div></div>
                     <button class="action-btn hide-on-export" id="btn-lock-right" onclick="toggleRight()">Confirm & Lock</button>
                 </div>
             </div>
+        </div>
+
+        <div class="pdf-page spacer-page">
+            <img src="LOGO WHITE NO BACKGROUND .png" class="spacer-logo" alt="" onerror="this.style.display='none'">
         </div>
 
         <div class="pdf-page" id="page-2">
@@ -345,42 +338,21 @@
             <div class="main-container">
                 <div class="col col-p2">
                     <h2>1 - Playlist Creation</h2>
-                    <div class="info-block">
-                        <span class="info-title">TITLE</span>
-                        <span class="info-text">We can provide recommendations and ideas based on the genre or mood we want to convey. The title is essential for capturing attention and setting the tone of the playlist.</span>
-                    </div>
-                    <div class="info-block">
-                        <span class="info-title">DESCRIPTION</span>
-                        <span class="info-text">We will suggest various playlist descriptions, including carefully chosen keywords designed to attract organic traffic from Spotify searches.</span>
-                    </div>
-                    <div class="info-block">
-                        <span class="info-title">ARTWORK</span>
-                        <span class="info-text">We’ll send you several professional artwork options inspired by Spotify’s editorial playlist designs. Feel free to share your ideas or references if you have a specific vision, so we can align with your preferences.</span>
-                    </div>
+                    <div class="info-block"><span class="info-title">TITLE</span><span class="info-text">We can provide recommendations and ideas based on the genre or mood we want to convey. The title is essential for capturing attention and setting the tone of the playlist.</span></div>
+                    <div class="info-block"><span class="info-title">DESCRIPTION</span><span class="info-text">We will suggest various playlist descriptions, including carefully chosen keywords designed to attract organic traffic from Spotify searches.</span></div>
+                    <div class="info-block"><span class="info-title">ARTWORK</span><span class="info-text">We’ll send you several professional artwork options inspired by Spotify’s editorial playlist designs. Feel free to share your ideas or references if you have a specific vision, so we can align with your preferences.</span></div>
                 </div>
 
                 <div class="col col-p2">
                     <h2>2 - Video Creation</h2>
-                    <div class="info-block">
-                        <span class="info-title">Ad Creatives</span>
-                        <span class="info-text">We'll create several creatives videos that will be used in the Meta ads campaign. The videos will be changed/tested from our side in case we think there could be any potential optimization in the campaign.</span>
-                    </div>
-                    <div class="info-block">
-                        <span class="info-title" style="color:#aaa; font-size:0.8rem;">Usage Note</span>
-                        <span class="info-text" style="font-style:italic; color:#999;">Videos are not sent for personal use, since the focus is the playlist growth and not a personal growth, and not reusable.</span>
-                    </div>
+                    <div class="info-block"><span class="info-title">Ad Creatives</span><span class="info-text">We'll create several creatives videos that will be used in the Meta ads campaign. The videos will be changed/tested from our side in case we think there could be any potential optimization in the campaign.</span></div>
+                    <div class="info-block"><span class="info-title" style="color:#aaa; font-size:0.8rem;">Usage Note</span><span class="info-text" style="font-style:italic; color:#999;">Videos are not sent for personal use, since the focus is the playlist growth and not a personal growth, and not reusable.</span></div>
                 </div>
 
                 <div class="col col-p2">
                     <h2>3 - Report + Support</h2>
-                    <div class="info-block">
-                        <span class="info-title">Monthly Insights</span>
-                        <span class="info-text">At the end of each 28 days campaign cycle, we send a detailed report with the insights from the Meta campaign, results and followers growth.</span>
-                    </div>
-                    <div class="info-block">
-                        <span class="info-title">Communication</span>
-                        <span class="info-text">We're always available for any update or request via mail or through a Whatsapp chat group that we can set up for faster communication.</span>
-                    </div>
+                    <div class="info-block"><span class="info-title">Monthly Insights</span><span class="info-text">At the end of each 28 days campaign cycle, we send a detailed report with the insights from the Meta campaign, results and followers growth.</span></div>
+                    <div class="info-block"><span class="info-title">Communication</span><span class="info-text">We're always available for any update or request via mail or through a Whatsapp chat group that we can set up for faster communication.</span></div>
                 </div>
             </div>
         </div>
@@ -403,58 +375,37 @@
 
         // --- LOGIC ---
         let leftLocked = false;
-        
         function generateSchedule() {
             const months = parseInt(document.getElementById('months').value);
             const startDateInput = document.getElementById('startDate').value;
             const container = document.getElementById('scheduleContainer');
             const oldInputs = document.querySelectorAll('.monthly-cost');
             const oldValues = Array.from(oldInputs).map(i => i.value);
-
             container.innerHTML = '';
             if (!startDateInput) return;
-
             let currentDate = new Date(startDateInput);
-
             for (let i = 1; i <= months; i++) {
                 let startStr = currentDate.toLocaleDateString('en-GB');
-                let endDate = new Date(currentDate);
-                endDate.setDate(currentDate.getDate() + 27);
+                let endDate = new Date(currentDate); endDate.setDate(currentDate.getDate() + 27);
                 let endStr = endDate.toLocaleDateString('en-GB');
                 const val = oldValues[i-1] || '';
-
-                const row = document.createElement('div');
-                row.className = 'schedule-row';
-                row.innerHTML = `
-                    <div class="schedule-header">Month ${i}<input type="hidden" class="hidden-date-range" value="${startStr} - ${endStr}"></div>
-                    <div class="schedule-dates">${startStr} - ${endStr}</div>
-                    <input type="number" class="monthly-cost" value="${val}" placeholder="Cost €" oninput="calculateTotal()" style="text-align:right;">
-                `;
-                container.appendChild(row);
-                currentDate.setDate(currentDate.getDate() + 28);
+                const row = document.createElement('div'); row.className = 'schedule-row';
+                row.innerHTML = `<div class="schedule-header">Month ${i}<input type="hidden" class="hidden-date-range" value="${startStr} - ${endStr}"></div><div class="schedule-dates">${startStr} - ${endStr}</div><input type="number" class="monthly-cost" value="${val}" placeholder="Cost €" oninput="calculateTotal()" style="text-align:right;">`;
+                container.appendChild(row); currentDate.setDate(currentDate.getDate() + 28);
             }
             calculateTotal();
         }
-
         function calculateTotal() {
-            const inputs = document.querySelectorAll('.monthly-cost');
-            let total = 0;
+            const inputs = document.querySelectorAll('.monthly-cost'); let total = 0;
             inputs.forEach(inp => total += (parseFloat(inp.value) || 0));
             document.getElementById('totalDisplay').innerText = `Total: €${total.toLocaleString('en-US', {minimumFractionDigits: 2})}`;
         }
-
         function toggleLeft() {
-            const editMode = document.getElementById('left-edit-mode');
-            const viewMode = document.getElementById('left-view-mode');
-            const btn = document.getElementById('btn-lock-left');
-            const list = document.getElementById('locked-schedule-list');
-
+            const editMode = document.getElementById('left-edit-mode'); const viewMode = document.getElementById('left-view-mode'); const btn = document.getElementById('btn-lock-left'); const list = document.getElementById('locked-schedule-list');
             if (!leftLocked) {
-                list.innerHTML = '';
-                const rows = document.querySelectorAll('.schedule-row');
+                list.innerHTML = ''; const rows = document.querySelectorAll('.schedule-row');
                 rows.forEach((row, index) => {
-                    const dates = row.querySelector('.hidden-date-range').value;
-                    const costVal = row.querySelector('.monthly-cost').value;
+                    const dates = row.querySelector('.hidden-date-range').value; const costVal = row.querySelector('.monthly-cost').value;
                     const cost = costVal ? `€${parseFloat(costVal).toLocaleString()}` : '€0';
                     list.innerHTML += `<div class="locked-schedule-item"><div><div class="locked-month">Month ${index + 1}</div><span class="locked-date">${dates}</span></div><div class="locked-cost">${cost}</div></div>`;
                 });
@@ -463,98 +414,45 @@
                 editMode.classList.remove('hidden'); viewMode.classList.add('hidden'); btn.innerText = "Confirm & Lock"; btn.classList.remove('locked'); leftLocked = false;
             }
         }
-
         async function getAccessToken() {
-            let cid, csec;
-            if (hasExternalKeys) { cid = API_CONFIG.clientId; csec = API_CONFIG.clientSecret; }
-            else { cid = document.getElementById('clientId').value; csec = document.getElementById('clientSecret').value; }
+            let cid, csec; if (hasExternalKeys) { cid = API_CONFIG.clientId; csec = API_CONFIG.clientSecret; } else { cid = document.getElementById('clientId').value; csec = document.getElementById('clientSecret').value; }
             if(!cid || !csec) { alert("API Keys Missing"); return null; }
-            try {
-                const result = await fetch('https://accounts.spotify.com/api/token', {
-                    method: 'POST',
-                    headers: { 'Content-Type': 'application/x-www-form-urlencoded', 'Authorization': 'Basic ' + btoa(cid + ':' + csec) },
-                    body: 'grant_type=client_credentials'
-                });
-                const data = await result.json();
-                return data.access_token;
-            } catch(e) { return null; }
+            try { const result = await fetch('https://accounts.spotify.com/api/token', { method: 'POST', headers: { 'Content-Type': 'application/x-www-form-urlencoded', 'Authorization': 'Basic ' + btoa(cid + ':' + csec) }, body: 'grant_type=client_credentials' }); const data = await result.json(); return data.access_token; } catch(e) { return null; }
         }
-
         async function fetchSpotifyData() {
-            const url = document.getElementById('spotifyUrl').value;
-            const match = url.match(/playlist\/([a-zA-Z0-9]+)/);
-            if (!match) return alert("Invalid URL");
-            const token = await getAccessToken();
-            if (!token) return;
-            try {
-                const result = await fetch(`https://api.spotify.com/v1/playlists/${match[1]}`, {
-                    headers: { 'Authorization': 'Bearer ' + token }
-                });
-                const data = await result.json();
-                document.getElementById('plTitle').innerText = data.name;
-                document.getElementById('plOwner').innerText = `by ${data.owner.display_name}`;
-                document.getElementById('plFollowers').innerText = `${data.followers.total.toLocaleString()} FOLLOWERS`;
-                if (data.images.length > 0) document.getElementById('plArtwork').src = data.images[0].url;
-            } catch (e) { alert("Error fetching data"); }
+            const url = document.getElementById('spotifyUrl').value; const match = url.match(/playlist\/([a-zA-Z0-9]+)/);
+            if (!match) return alert("Invalid URL"); const token = await getAccessToken(); if (!token) return;
+            try { const result = await fetch(`https://api.spotify.com/v1/playlists/${match[1]}`, { headers: { 'Authorization': 'Bearer ' + token } }); const data = await result.json(); document.getElementById('plTitle').innerText = data.name; document.getElementById('plOwner').innerText = `by ${data.owner.display_name}`; document.getElementById('plFollowers').innerText = `${data.followers.total.toLocaleString()} FOLLOWERS`; if (data.images.length > 0) document.getElementById('plArtwork').src = data.images[0].url; } catch (e) { alert("Error fetching data"); }
         }
-
         let rightLocked = false;
-        const tiersData = [
-            { title: "Tier 1", countries: ["Netherlands", "Australia", "Austria", "Belgium", "Canada", "Switzerland", "Germany", "Denmark", "Spain", "Finland", "France", "United Kingdom", "Ireland", "Italy", "Japan", "Norway", "New Zealand", "Sweden", "United States", "Iceland"] },
-            { title: "Tier 2", countries: ["Argentina", "Brazil", "Mexico", "Colombia", "Turkey", "Chile", "South Africa", "Croatia", "Hungary", "Czech Republic", "Estonia", "Greece", "Hong Kong", "Luxembourg", "Latvia", "Malta", "Peru", "Poland", "Portugal", "Uruguay", "Slovenia", "Slovakia"] },
-            { title: "Tier 3", countries: ["Indonesia", "Philippines", "Thailand", "Malaysia", "Nigeria", "Kenya"] }
-        ];
-
+        const tiersData = [ { title: "Tier 1", countries: ["Netherlands", "Australia", "Austria", "Belgium", "Canada", "Switzerland", "Germany", "Denmark", "Spain", "Finland", "France", "United Kingdom", "Ireland", "Italy", "Japan", "Norway", "New Zealand", "Sweden", "United States", "Iceland"] }, { title: "Tier 2", countries: ["Argentina", "Brazil", "Mexico", "Colombia", "Turkey", "Chile", "South Africa", "Croatia", "Hungary", "Czech Republic", "Estonia", "Greece", "Hong Kong", "Luxembourg", "Latvia", "Malta", "Peru", "Poland", "Portugal", "Uruguay", "Slovenia", "Slovakia"] }, { title: "Tier 3", countries: ["Indonesia", "Philippines", "Thailand", "Malaysia", "Nigeria", "Kenya"] } ];
         function renderTiersInput() {
             const container = document.getElementById('tiersContainer');
-            tiersData.forEach((tier, index) => {
-                container.innerHTML += `<div class="tier-group"><div class="tier-header"><span class="tier-title">${tier.title}</span><input type="checkbox" checked onchange="toggleTierGroup(this, 'tlist-${index}')"></div><div class="tier-countries" id="tlist-${index}">${tier.countries.map(c => `<label class="country-label"><input type="checkbox" value="${c}" checked> ${c}</label>`).join('')}</div></div>`;
-            });
+            tiersData.forEach((tier, index) => { container.innerHTML += `<div class="tier-group"><div class="tier-header"><span class="tier-title">${tier.title}</span><input type="checkbox" checked onchange="toggleTierGroup(this, 'tlist-${index}')"></div><div class="tier-countries" id="tlist-${index}">${tier.countries.map(c => `<label class="country-label"><input type="checkbox" value="${c}" checked> ${c}</label>`).join('')}</div></div>`; });
         }
-
-        function toggleTierGroup(cb, id) {
-            const inputs = document.getElementById(id).querySelectorAll('input');
-            inputs.forEach(i => i.disabled = !cb.checked);
-            document.getElementById(id).style.opacity = cb.checked ? '1' : '0.3';
-        }
-
+        function toggleTierGroup(cb, id) { const inputs = document.getElementById(id).querySelectorAll('input'); inputs.forEach(i => i.disabled = !cb.checked); document.getElementById(id).style.opacity = cb.checked ? '1' : '0.3'; }
         function toggleRight() {
-            const editMode = document.getElementById('right-edit-mode');
-            const viewMode = document.getElementById('right-view-mode');
-            const btn = document.getElementById('btn-lock-right');
-            const list = document.getElementById('locked-tiers-list');
+            const editMode = document.getElementById('right-edit-mode'); const viewMode = document.getElementById('right-view-mode'); const btn = document.getElementById('btn-lock-right'); const list = document.getElementById('locked-tiers-list');
             if (!rightLocked) {
-                list.innerHTML = '';
-                tiersData.forEach((tier, index) => {
-                    const groupInputs = document.querySelectorAll(`#tlist-${index} input:checked:not(:disabled)`);
-                    if (groupInputs.length > 0) {
-                        const countriesText = Array.from(groupInputs).map(i => i.value).join(', ');
-                        list.innerHTML += `<div class="locked-tier-block"><div class="locked-tier-title">${tier.title}</div><div class="locked-country-list">${countriesText}.</div></div>`;
-                    }
-                });
+                list.innerHTML = ''; tiersData.forEach((tier, index) => { const groupInputs = document.querySelectorAll(`#tlist-${index} input:checked:not(:disabled)`); if (groupInputs.length > 0) { const countriesText = Array.from(groupInputs).map(i => i.value).join(', '); list.innerHTML += `<div class="locked-tier-block"><div class="locked-tier-title">${tier.title}</div><div class="locked-country-list">${countriesText}.</div></div>`; } });
                 editMode.classList.add('hidden'); viewMode.classList.remove('hidden'); btn.innerText = "Edit Countries"; btn.classList.add('locked'); rightLocked = true;
-            } else {
-                editMode.classList.remove('hidden'); viewMode.classList.add('hidden'); btn.innerText = "Confirm & Lock"; btn.classList.remove('locked'); rightLocked = false;
-            }
+            } else { editMode.classList.remove('hidden'); viewMode.classList.add('hidden'); btn.innerText = "Confirm & Lock"; btn.classList.remove('locked'); rightLocked = false; }
         }
 
-        // --- EXPORT PDF FIX ---
+        // --- EXPORT PDF FINAL ---
         function exportToPDF() {
             const toHide = document.querySelectorAll('.hide-on-export');
             toHide.forEach(el => el.classList.add('hidden'));
 
-            // 1. Attiva modalità export (rimuove padding/margin body e allinea a sinistra)
+            // Attiva modalità export (disabilita flexbox, margini 0)
             document.body.classList.add('export-mode');
-            
-            // 2. Scroll to top per evitare tagli
-            window.scrollTo(0, 0);
+            window.scrollTo(0,0);
 
-            // 3. Sync Artist Name
+            // Sync
             const artistVal = document.getElementById('artistInput').value;
             document.getElementById('artistDisplay').innerText = artistVal;
 
             let finalFilename = `Soundvertise Playlist Growth: ${artistVal}.pdf`;
-
             const element = document.getElementById('export-content');
             
             const opt = {
@@ -565,16 +463,15 @@
                     scale: 2, 
                     useCORS: true, 
                     scrollX: 0, scrollY: 0,
-                    // NON usare windowWidth, lascia che prenda la larghezza del div
+                    // NON usare windowWidth, lasciare automatico ma con CSS bloccato
                 },
                 jsPDF: { 
                     unit: 'px', 
-                    // FORMATO ESATTO PIXEL PER PIXEL
                     format: [1123, 794], 
                     orientation: 'landscape',
                     hotfixes: ["px_scaling"]
                 },
-                // PAGEBREAK CONFIG: Taglia esattamente dopo ogni elemento .pdf-page
+                // Taglia dopo ogni div .pdf-page
                 pagebreak: { mode: 'css', after: '.pdf-page' }
             };
 
